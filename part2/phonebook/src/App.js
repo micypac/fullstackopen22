@@ -1,37 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Filter from './Filter';
 import InputField from './InputField';
 import Persons from './Persons';
 
 const App = () => {
 
-  const [persons, setPersons] = useState(           // Stores the state of the list of person contacts.
-    [
-      {
-        id: 1,
-        name: 'Ashley Clarke',
-        number: '201-123-4567'
-      },
-      {
-        id: 2,
-        name: 'Jenny Muchnik',
-        number: '201-834-9123'
-      },
-      {
-        id: 3,
-        name: 'Monica Grace',
-        number: '201-000-4577'
-      },
-      {
-        id: 4,
-        name: 'Michaela Lao',
-        number: '973-785-1234'
-      }
-    ]
-  )
+  // const [persons, setPersons] = useState(           // Stores the state of the list of person contacts.
+  //   [
+  //     {
+  //       id: 1,
+  //       name: 'Ashley Clarke',
+  //       number: '201-123-4567'
+  //     },
+  //     {
+  //       id: 2,
+  //       name: 'Jenny Muchnik',
+  //       number: '201-834-9123'
+  //     },
+  //     {
+  //       id: 3,
+  //       name: 'Monica Grace',
+  //       number: '201-000-4577'
+  //     },
+  //     {
+  //       id: 4,
+  //       name: 'Michaela Lao',
+  //       number: '973-785-1234'
+  //     }
+  //   ]
+  // )
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')        // Stores state for the name field.
   const [newNumber, setNewNumber] = useState('')    // Stores state for the number field.
   const [newFilter, setNewFilter] = useState('')    // Stores state for the filter field.
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   // Handle name field onchange event.
   const handleNewName = (event) => {
