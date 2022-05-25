@@ -21,7 +21,7 @@ const App = () => {
 
   const countriesFiltered = !filter
     ? countries
-    : countries.filter( country => country.name.official.toLowerCase().includes(filter.toLowerCase()))
+    : countries.filter( country => country.name.common.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div>
