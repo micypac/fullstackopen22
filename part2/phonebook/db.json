@@ -29,6 +29,11 @@
       "name": "Tony Stark",
       "number": "201-998-0987",
       "id": 6
+    },
+    {
+      "name": "Shouko Komi",
+      "number": "456-765-0987",
+      "id": 7
     }
   ]
 }

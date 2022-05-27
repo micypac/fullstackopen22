@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import InputField from './components/InputField';
 import Persons from './components/Persons';
-import contactService from './services/phonebook'
+import contactService from './services/phonebook';
+import Notification from './components/Notification';
 
 const App = () => {
 
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')        // Stores state for the name field.
   const [newNumber, setNewNumber] = useState('')    // Stores state for the number field.
   const [newFilter, setNewFilter] = useState('')    // Stores state for the filter field.
+  const [message, setMesssage] = useState(null)
+  const [messageType, setMessageType] = useState('added')
 
   // Handle name field onchange event.
   const handleNewName = (event) => {    
@@ -51,6 +54,19 @@ const App = () => {
           .update(updatedPerson.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map( item => item.id !== updatedPerson.id ? item : returnedPerson))
+            setMessageType('update')
+            setMesssage(`${updatedPerson.name} contact has been updated...`)
+            setTimeout( () => {
+              setMesssage(null)
+            }, 5000)
+          })
+          .catch( error => {
+            setMessageType('error')
+            setMesssage(`${updatedPerson.name} has been already removed from contacts...`)
+            setTimeout( () => {
+              setMesssage(null)
+            }, 5000)
+            setPersons( persons.filter( item => item.id !== updatedPerson.id))
           })
       }
     } else {
@@ -65,7 +81,12 @@ const App = () => {
         contactService
           .create(person)
           .then(returnedPerson => {
-            setPersons(persons.concat(returnedPerson));            
+            setPersons(persons.concat(returnedPerson))
+            setMessageType('added')
+            setMesssage(`${nameTitle} has been added as contact...`) 
+            setTimeout( () => {
+              setMesssage(null)
+            }, 5000)           
           })
     }
 
@@ -93,6 +114,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} messageType={messageType} />
       <Filter newFilter={newFilter} handleFilter={handleFilter} />
       
       <h2>Add Contact</h2>
