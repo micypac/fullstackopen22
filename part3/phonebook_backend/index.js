@@ -1,8 +1,6 @@
 const express = require("express");
-const { contentType } = require("express/lib/response");
-
+const morgan = require("morgan");
 const app = express()
-app.use(express.json())
 
 let persons = [
   { 
@@ -27,10 +25,23 @@ let persons = [
   }
 ] 
 
+// Create new morgan token to log request body during POST request.
+morgan.token('addedPerson', (req, res) => {
+  console.log(req.method);
+  if (req.method === "POST") {
+    return JSON.stringify(req.body)
+  }
+  return null
+})
+
 // Helper function to generate ID for POST request.
 const generateId = () => {
   return Math.floor(Math.random() * 9999)
 }
+
+app.use(express.json())
+// app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :addedPerson'))
 
 // GET request on root address.
 app.get('/', (req, res) => {
