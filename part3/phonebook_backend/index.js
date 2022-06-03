@@ -27,7 +27,7 @@ let persons = [
   }
 ] 
 
-// Create new morgan token to log request body during POST request.
+// Create new morgan(logger middleware) token to log request body during POST request.
 morgan.token('addedPerson', (req, res) => {
   console.log(req.method);
   if (req.method === "POST") {
@@ -35,11 +35,6 @@ morgan.token('addedPerson', (req, res) => {
   }
   return null
 })
-
-// Helper function to generate ID for POST request.
-const generateId = () => {
-  return Math.floor(Math.random() * 9999)
-}
 
 app.use(express.json())
 app.use(express.static('build'))
@@ -52,7 +47,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :a
 //   res.send(`<h1>Welcome to Phonebook App</h1>`)
 // })
 
-// GET request on /info address.
+// GET request on /info route. Displays the number of people stored in phonebook app.
 app.get('/info', (req, res) => {
   const dateNow = new Date();
   const infoMessage = `<h3>Phonebook has info for ${persons.length} people.</h3>
@@ -60,7 +55,7 @@ app.get('/info', (req, res) => {
   res.send(infoMessage)
 })
 
-// Fetch the entire persons resource.
+// READ. Fetch the entire persons resource.
 app.get('/api/persons', (req, res) => {
   
   Person
@@ -70,7 +65,7 @@ app.get('/api/persons', (req, res) => {
     })
 })
 
-// Fetch a single resource provided by a valid ID parameter.
+// READ. Fetch a single resource provided by a valid ID parameter.
 app.get('/api/persons/:id', (req, res) => {
   // const id = Number(req.params.id);
   // const person = persons.find( person => person.id === id);
@@ -89,14 +84,16 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 // DELETE a single resource provided a valid ID parameter.
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter( person => person.id !== id);
+app.delete('/api/persons/:id', (req, res, next) => {
 
-  res.status(204).end()
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
-// POST a single non-empty and non-existing name resource. 
+// CREATE. Post a single non-empty and non-existing name resource. 
 app.post('/api/persons', (req, res) => {
   const body = req.body;
 
@@ -110,14 +107,6 @@ app.post('/api/persons', (req, res) => {
     })
   } 
 
-  // const findPerson = persons.find( person => person.name.toLowerCase() === body.name.toLowerCase())
-
-  // if (findPerson) {
-  //   return res.status(409).json({
-  //     error: "Name already exist in phonebook."
-  //   })
-  // }
-
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -127,10 +116,19 @@ app.post('/api/persons', (req, res) => {
     .then(savedPerson => {
       res.json(savedPerson)
     })
-
-  // persons = persons.concat(person);
-  // res.json(person)
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError"){
+    return response.status(400).send({error: "malformatted id"})
+  }
+
+  next(error)
+}
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
