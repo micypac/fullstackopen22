@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/person")
 const app = express()
 
 let persons = [
@@ -61,20 +62,30 @@ app.get('/info', (req, res) => {
 
 // Fetch the entire persons resource.
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  
+  Person
+    .find({})
+    .then(contacts => {
+      res.json(contacts)
+    })
 })
 
 // Fetch a single resource provided by a valid ID parameter.
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find( person => person.id === id);
+  // const id = Number(req.params.id);
+  // const person = persons.find( person => person.id === id);
   
-  if (person) {
-    res.json(person)
-  } else {
-    res.statusMessage = "No matching resource found for the provided id."
-    res.status(404).end()
-  }
+  // if (person) {
+  //   res.json(person)
+  // } else {
+  //   res.statusMessage = "No matching resource found for the provided id."
+  //   res.status(404).end()
+  // }
+
+  Person.findById(req.params.id)
+    .then(person => {
+      res.json(person)
+    })
 })
 
 // DELETE a single resource provided a valid ID parameter.
@@ -99,23 +110,26 @@ app.post('/api/persons', (req, res) => {
     })
   } 
 
-  const findPerson = persons.find( person => person.name.toLowerCase() === body.name.toLowerCase())
+  // const findPerson = persons.find( person => person.name.toLowerCase() === body.name.toLowerCase())
 
-  if (findPerson) {
-    return res.status(409).json({
-      error: "Name already exist in phonebook."
-    })
-  }
+  // if (findPerson) {
+  //   return res.status(409).json({
+  //     error: "Name already exist in phonebook."
+  //   })
+  // }
 
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-    
-  }
+  })
 
-  persons = persons.concat(person);
-  res.json(person)
+  person.save()
+    .then(savedPerson => {
+      res.json(savedPerson)
+    })
+
+  // persons = persons.concat(person);
+  // res.json(person)
 })
 
 const PORT = process.env.PORT || 3001;
