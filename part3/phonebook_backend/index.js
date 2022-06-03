@@ -48,9 +48,9 @@ app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :addedPerson'))
 
 // GET request on root address.
-app.get('/', (req, res) => {
-  res.send(`<h1>Welcome to Phonebook App</h1>`)
-})
+// app.get('/', (req, res) => {
+//   res.send(`<h1>Welcome to Phonebook App</h1>`)
+// })
 
 // GET request on /info address.
 app.get('/info', (req, res) => {
