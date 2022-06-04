@@ -4,29 +4,6 @@ const cors = require("cors");
 const Person = require("./models/person")
 const app = express()
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-] 
-
 // Create new morgan(logger middleware) token to log request body during POST request.
 morgan.token('addedPerson', (req, res) => {
   console.log(req.method);
@@ -47,12 +24,16 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :a
 //   res.send(`<h1>Welcome to Phonebook App</h1>`)
 // })
 
-// GET request on /info route. Displays the number of people stored in phonebook app.
+// READ. Get request on /info route. Displays the number of people stored in phonebook app.
 app.get('/info', (req, res) => {
   const dateNow = new Date();
-  const infoMessage = `<h3>Phonebook has info for ${persons.length} people.</h3>
-                        <h3>${dateNow}</h3>`
-  res.send(infoMessage)
+  
+  Person.countDocuments({}, (err, count) => {
+    const infoMessage = `<h3>Phonebook has info for ${count} people.</h3>
+                        <h3>${dateNow}</h3>`;
+    res.send(infoMessage)
+  })
+  
 })
 
 // READ. Fetch the entire persons resource.
@@ -67,20 +48,27 @@ app.get('/api/persons', (req, res) => {
 
 // READ. Fetch a single resource provided by a valid ID parameter.
 app.get('/api/persons/:id', (req, res) => {
-  // const id = Number(req.params.id);
-  // const person = persons.find( person => person.id === id);
-  
-  // if (person) {
-  //   res.json(person)
-  // } else {
-  //   res.statusMessage = "No matching resource found for the provided id."
-  //   res.status(404).end()
-  // }
 
   Person.findById(req.params.id)
     .then(person => {
       res.json(person)
     })
+})
+
+//UPDATE. Update a person's number.
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body;
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(req.params.id, person, {new: true})
+    .then(updatedPerson => {
+      res.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 // DELETE a single resource provided a valid ID parameter.
