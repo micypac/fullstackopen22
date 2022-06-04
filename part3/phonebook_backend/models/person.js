@@ -1,22 +1,22 @@
-require("dotenv").config()
-const mongoose = require("mongoose")
+require('dotenv').config()
+const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI
 
-console.log('connecting to', url);
+console.log('connecting to', url)
 
 mongoose.connect(url)
   .then(result => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB')
   })
   .catch(err => {
-    console.log('Error connecting to MongoDB:', err.message);
+    console.log('Error connecting to MongoDB:', err.message)
   })
 
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: 3,
+    minlength: [3, 'Contact name is too short!'],
     required: [true, 'Contact name is required!']
   },
   number: {
@@ -27,7 +27,7 @@ const personSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid phone number!`
     }
   }
-});
+})
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -37,4 +37,4 @@ personSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model("Person", personSchema)
+module.exports = mongoose.model('Person', personSchema)

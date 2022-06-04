@@ -9,8 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../../part2/phonebook/ && npm run build && cp -r build /Users/michaelpacleb/tutorial/fullstackopen/fullstackopen22/part3/phonebook_backend",
     "deploy": "git subtree push --prefix /Users/michaelpacleb/tutorial/fullstackopen/fullstackopen22/part3/phonebook_backend heroku-phonebook main",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && cd ../.. && npm run deploy",
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "author": "micypac",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.17.0",
     "nodemon": "^2.0.16"
   }
 }

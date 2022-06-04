@@ -52,7 +52,7 @@ const App = () => {
 
         contactService
           .update(updatedPerson.id, updatedPerson)
-          .then(returnedPerson => {
+          .then(returnedPerson => {      
             setPersons(persons.map( item => item.id !== updatedPerson.id ? item : returnedPerson))
             setMessageType('update')
             setMesssage(`${updatedPerson.name} contact has been updated...`)
@@ -62,7 +62,8 @@ const App = () => {
           })
           .catch( error => {
             setMessageType('error')
-            setMesssage(`${updatedPerson.name} has been already removed from contacts...`)
+            // setMesssage(`${updatedPerson.name} has been already removed from contacts...`)
+            setMesssage(error.response.data.error)
             setTimeout( () => {
               setMesssage(null)
             }, 5000)
@@ -87,6 +88,14 @@ const App = () => {
             setTimeout( () => {
               setMesssage(null)
             }, 5000)           
+          })
+          .catch(error => {
+            console.log(error);
+            setMessageType('error')            
+            setMesssage(error.response.data.error)
+            setTimeout(() => {
+              setMesssage(null)
+            }, 5000)
           })
     }
 
