@@ -1,6 +1,6 @@
-const totalLikes = require('../utils/for_testing').totalLikes
+const favoriteBlog = require('../utils/for_testing').favoriteBlog
 
-describe('total likes', () => {
+describe('favorite blog', () => {
   const listWithOneBlog = [
     {
       _id: '5a422aa71b54a676234d17f8',
@@ -43,15 +43,23 @@ describe('total likes', () => {
     }
   ]
 
-  test('of empty list is zero', ()=> {
-    expect(totalLikes([])).toBe(0)
+  test('of empty blog list, returns empty object', () => {
+    expect(favoriteBlog([])).toEqual({})
   })
 
-  test('of only one blog, equals to likes of that', () => {
-    expect(totalLikes(listWithOneBlog)).toBe(5)
+  test('of only one blog, equals itself', () => {
+    expect(favoriteBlog(listWithOneBlog)).toEqual({
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    })
   })
 
-  test('of many blogs, equals to all likes of all of them', () => {
-    expect(totalLikes(manyBlogs)).toBe(90)
+  test('of many blogs, equals to one with most likes', () => {
+    expect(favoriteBlog(manyBlogs)).toEqual({
+      'title': 'Prototypal Inheritance',
+      'author': 'Lydia Hallie',
+      'likes': 50
+    })
   })
 })
