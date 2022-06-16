@@ -1,7 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (req, res) => {
   Blog.find({})
@@ -12,34 +10,13 @@ blogsRouter.get('/', async (req, res) => {
 })
 
 blogsRouter.post('/', async (req, res, next) => {
-  const body = req.body
 
-  /*
-    Getting random user from users collection and using user.id to post a blog.
-  */
-  // const userArr = await User.aggregate([
-  //   { $sample: { size: 1 } }
-  // ])
-  // const user = await User.findById(userArr[0]._id)
-
-  /*
-    Getting tokenized user.id from request authorization header.
-  */
-  // const token = getTokenFrom(req)
   if (!req.token) {
     return res.status(401).json({ error: 'token missing' })
   }
 
-  let decodedToken
-
-  try {
-    decodedToken = jwt.verify(req.token, process.env.SECRET)
-  } catch(e) {
-    next(e)
-    return res
-  }
-
-  const user = await User.findById(decodedToken.id)
+  const body = req.body
+  const user = req.user
 
   const blog = new Blog({
     title: body.title,
@@ -67,7 +44,8 @@ blogsRouter.delete('/:id', async (req, res, next) => {
     return res.status(401).json({ error: 'token missing' })
   }
 
-  let decodedToken
+  const decodedToken = req.decodedToken
+  const user = req.user
   let blog
 
   // retrieve blog and check if exist from collections
@@ -81,22 +59,9 @@ blogsRouter.delete('/:id', async (req, res, next) => {
     next(ex)
   }
 
-  // decode token using jsonwebtoken
-  try {
-    decodedToken = jwt.verify(req.token, process.env.SECRET)
-  } catch(ex) {
-    next(ex)
-    return res
-  }
-
-  // find and retrieve user to update the blogs array and remove the blog.id
-  const user = await User.findById(decodedToken.id)
-
-  // console.log('****blog user id:', typeof(blog.user.toString()), blog.user.toString())
-  // console.log('decoded token id:', typeof(decodedToken.id), decodedToken.id.toString())
-  // console.log('user:', user)
-  // console.log('blog:', blog)
-  // console.log('blog id', blog.id.toString())
+  // console.log('blog user id :', typeof(blog.user.toString()), blog.user.toString())
+  // console.log('decoded id   :', typeof(decodedToken.id), decodedToken.id.toString())
+  // console.log('user id      :', typeof(user.id), user.id.toString())
 
   // compare blog creator and requestor if the same user.id
   if (blog.user.toString() !== decodedToken.id){
@@ -109,10 +74,12 @@ blogsRouter.delete('/:id', async (req, res, next) => {
     user.blogs = user.blogs.filter(b => b.toString() !== blog.id.toString())
     await user.save()
     res.status(204).end()
+
   }catch(exception) {
     next(exception)
   }
 })
+
 
 blogsRouter.put('/:id', async (req, res, next) => {
   const body = req.body
