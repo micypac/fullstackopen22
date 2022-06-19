@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -12,6 +13,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('added')
 
 
   useEffect(() => {
@@ -46,7 +50,12 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch(exception){
-      console.log(exception);
+      console.log(exception)
+      setMessageType('error')
+      setMessage(exception.response.data.error)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -74,6 +83,12 @@ const App = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
+
+    setMessageType('added')
+    setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
 
@@ -124,6 +139,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
+        <Notification message={message} displayClass={messageType} />
         {loginForm()}
       </div>
     )
@@ -132,6 +148,7 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>
+        <Notification message={message} displayClass={messageType} />
         <p>{user.name} logged in <button onClick={handleLogout} type='button'>logout</button></p>
         
 
