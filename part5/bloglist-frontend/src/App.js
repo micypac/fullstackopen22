@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
@@ -18,6 +18,7 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('added')
 
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -90,6 +91,8 @@ const App = () => {
     setTimeout(() => {
       setMessage(null)
     }, 5000)
+
+    blogFormRef.current.toggleVisibility()
   }
 
 
@@ -152,7 +155,7 @@ const App = () => {
         <Notification message={message} displayClass={messageType} />
         <p>{user.name} logged in <button onClick={handleLogout} type='button'>logout</button></p>
         
-        <Togglable buttonLabel='new blog'>
+        <Togglable buttonLabel='new blog' ref={blogFormRef}>
           <h2>Create New Blog</h2>
           {blogForm()}
         </Togglable>
