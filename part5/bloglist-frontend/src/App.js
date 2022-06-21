@@ -4,16 +4,14 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('added')
@@ -70,21 +68,10 @@ const App = () => {
     setPassword('')
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
-
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const addBlog = async (blogObject) => {
 
     const returnedBlog = await blogService.create(blogObject)
     setBlogs(blogs.concat(returnedBlog))
-
-    setTitle('')
-    setAuthor('')
-    setUrl('')
 
     setMessageType('added')
     setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
@@ -94,7 +81,6 @@ const App = () => {
 
     blogFormRef.current.toggleVisibility()
   }
-
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -122,22 +108,6 @@ const App = () => {
     </form>
   )
 
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title:<input type='text' name='Title' value={title} onChange={(event) => setTitle(event.target.value)} />
-      </div>
-      <div>
-        author:<input type='text' name='Title' value={author} onChange={(event) => setAuthor(event.target.value)} />
-      </div>
-      <div>
-        url:<input type='text' name='Url' value={url} onChange={(event) => setUrl(event.target.value)} />
-      </div>
-      <button type='submit'>create</button>
-    </form>
-  )
-  
     
   if (user === null) {
     return (
@@ -156,8 +126,7 @@ const App = () => {
         <p>{user.name} logged in <button onClick={handleLogout} type='button'>logout</button></p>
         
         <Togglable buttonLabel='new blog' ref={blogFormRef}>
-          <h2>Create New Blog</h2>
-          {blogForm()}
+          <BlogForm createBlog={addBlog} />
         </Togglable>
         <br />
         {blogs.map(blog =>
