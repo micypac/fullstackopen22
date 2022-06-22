@@ -82,6 +82,15 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
+  const incrementLikes = async (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const updatedBlog = {...blog, likes: blog.likes += 1}
+
+    const returnedBlog = await blogService.update(id, updatedBlog)
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -130,7 +139,7 @@ const App = () => {
         </Togglable>
         <br />
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} incLikes={() => incrementLikes(blog.id)} />
         )}
       </div>
     )    

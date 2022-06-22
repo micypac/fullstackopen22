@@ -27,6 +27,7 @@ blogsRouter.post('/', async (req, res, next) => {
   })
 
   try {
+    await blog.populate('user', { username: 1, name: 1 })
     const savedBlog = await blog.save()
 
     user.blogs = user.blogs.concat(savedBlog._id)
@@ -84,11 +85,14 @@ blogsRouter.delete('/:id', async (req, res, next) => {
 blogsRouter.put('/:id', async (req, res, next) => {
   const body = req.body
 
+  console.log('*****REQUEST BODY*****', body)
+
   const blog = {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: body.user.id
   }
 
   try {
@@ -99,6 +103,7 @@ blogsRouter.put('/:id', async (req, res, next) => {
         runValidators: true,
         context: 'query'
       })
+      .populate('user', { username: 1, name: 1 })
     res.json(updatedBlog)
   } catch(exception){
     next(exception)
