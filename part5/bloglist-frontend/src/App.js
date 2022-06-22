@@ -39,6 +39,7 @@ const App = () => {
       setUser(user)
 
       blogService.setToken(user.token)
+
     }
   }, [])
 
@@ -85,6 +86,15 @@ const App = () => {
     }, 5000)
 
     blogFormRef.current.toggleVisibility()
+  }
+
+  const deleteBlog = async (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    }
   }
 
   const incrementLikes = async (id) => {
@@ -144,7 +154,7 @@ const App = () => {
         </Togglable>
         <br />
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} incLikes={() => incrementLikes(blog.id)} />
+          <Blog key={blog.id} blog={blog} user={user} incLikes={() => incrementLikes(blog.id)} removeBlog={() => deleteBlog(blog.id)} />
         )}
       </div>
     )    
