@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(sortBlogs(blogs))
-    )  
+    )
   }, [])
 
 
@@ -99,7 +99,7 @@ const App = () => {
 
   const incrementLikes = async (id) => {
     const blog = blogs.find(blog => blog.id === id)
-    const updatedBlog = {...blog, likes: blog.likes += 1}
+    const updatedBlog = { ...blog, likes: blog.likes += 1 }
 
     const returnedBlog = await blogService.update(id, updatedBlog)
     setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
@@ -127,12 +127,12 @@ const App = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-                
+
       <button type="submit">login</button>
     </form>
   )
 
-    
+
   if (user === null) {
     return (
       <div>
@@ -148,7 +148,7 @@ const App = () => {
         <h1>Blogs</h1>
         <Notification message={message} displayClass={messageType} />
         <p>{user.name} logged in <button onClick={handleLogout} type='button'>logout</button></p>
-        
+
         <Togglable buttonLabel='new blog' ref={blogFormRef}>
           <BlogForm createBlog={addBlog} />
         </Togglable>
@@ -157,7 +157,7 @@ const App = () => {
           <Blog key={blog.id} blog={blog} user={user} incLikes={() => incrementLikes(blog.id)} removeBlog={() => deleteBlog(blog.id)} />
         )}
       </div>
-    )    
+    )
   }
 }
 
