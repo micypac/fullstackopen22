@@ -62,7 +62,7 @@ test('show button will render blog url and likes', async () => {
 
 })
 
-test.only('clicking the like button twice will call the event handler the same amount', async () => {
+test('clicking the like button twice will call the event handler the same amount', async () => {
   const blogObj = {
     title: 'Testing React Apps',
     author: 'john smith',
