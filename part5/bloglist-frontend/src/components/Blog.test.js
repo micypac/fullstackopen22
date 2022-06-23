@@ -61,3 +61,35 @@ test('show button will render blog url and likes', async () => {
   expect(likesElement).toBeDefined()
 
 })
+
+test.only('clicking the like button twice will call the event handler the same amount', async () => {
+  const blogObj = {
+    title: 'Testing React Apps',
+    author: 'john smith',
+    url: 'https://example.com/testing-react-apps',
+    likes: 2
+  }
+
+  const userObj = {
+    id: '12345',
+    name: 'john smith',
+    username: 'jsmith01'
+  }
+
+  const incLikesHandler = jest.fn()
+  const removeBlogHandler = jest.fn()
+
+  render(
+    <Blog blog={blogObj} user={userObj} incLikes={incLikesHandler} removeBlog={removeBlogHandler} />
+  )
+
+  const user = userEvent.setup()
+  const showButton = screen.getByText('show')
+  await user.click(showButton)
+
+  const likeButton = screen.getByText('Like!')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(incLikesHandler.mock.calls).toHaveLength(2)
+})
