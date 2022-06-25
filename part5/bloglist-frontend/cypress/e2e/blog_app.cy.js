@@ -40,5 +40,28 @@ describe('Blog app', () => {
     })
   })
 
+  describe('When logged in', function() {
+    beforeEach(function(){
+      cy.login({
+        username: 'micpac',
+        password: 'fullstack'
+      })
+
+      // cy.get('#username').type('micpac')
+      // cy.get('#password').type('fullstack')
+      // cy.get('#login-button').click()
+    })
+
+    it.only('blog can be created', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('E2E Testing using Cypress')
+      cy.get('#author').type('Monica Grace')
+      cy.get('#url').type('https://example.com/e2e-testing-cypress')
+      cy.get('#submit-button').click()
+
+      cy.contains('E2E Testing using Cypress')
+    })
+  })
+
 
 })

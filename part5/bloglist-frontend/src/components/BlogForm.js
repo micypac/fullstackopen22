@@ -37,15 +37,15 @@ const BlogForm = (props) => {
       <h2>Create New Blog</h2>
       <form onSubmit={addBlog}>
         <div>
-          title:<input type='text' name='Title' value={title} onChange={handleTitleChange} placeholder='blog title' />
+          title:<input id='title' type='text' name='Title' value={title} onChange={handleTitleChange} placeholder='blog title' />
         </div>
         <div>
-          author:<input type='text' name='Title' value={author} onChange={handleAuthorChange} placeholder='blog author' />
+          author:<input id='author' type='text' name='Title' value={author} onChange={handleAuthorChange} placeholder='blog author' />
         </div>
         <div>
-          url:<input type='text' name='Url' value={url} onChange={handleUrlChange} placeholder='blog url' />
+          url:<input id='url' type='text' name='Url' value={url} onChange={handleUrlChange} placeholder='blog url' />
         </div>
-        <button type='submit'>create</button>
+        <button id='submit-button' type='submit'>create</button>
       </form>
 
     </div>
