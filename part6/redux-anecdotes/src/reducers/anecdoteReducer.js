@@ -27,7 +27,7 @@ const sortAnecdotes = (arr) => {
   return newArr
 }
 
-const reducer = (state = initialState, action) => {
+const anecdotesReducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
@@ -67,4 +67,4 @@ export const addVotesOf = (id) => {
   }
 }
 
-export default reducer
+export default anecdotesReducer
