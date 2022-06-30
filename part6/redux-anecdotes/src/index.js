@@ -9,6 +9,6 @@ import store from './components/Store'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
+  // document.getElementById('root')
 )
