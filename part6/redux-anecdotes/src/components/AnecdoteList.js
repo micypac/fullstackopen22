@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { addVotesOf } from '../reducers/anecdoteReducer'
+import { addVotesAction } from '../reducers/anecdoteReducer'
 import { createMessage, nullMessage } from '../reducers/messageReducer'
 
 
@@ -29,10 +29,22 @@ const AnecdoteList = () => {
   })
 
 
+  // const handleVotes = (id) => {
+  //   dispatch(addVotesOf(id))
+  //   const selectAnecdote = anecdotes.find(a => a.id === id)
+  //   const message = `you voted '${selectAnecdote.content}'`
+  //   dispatch(createMessage(message))
+  //   setTimeout(() => {
+  //     dispatch(nullMessage())
+  //   }, 5000)
+  // }
+
   const handleVotes = (id) => {
-    dispatch(addVotesOf(id))
-    const selectAnecdote = anecdotes.find(a => a.id === id)
-    const message = `you voted '${selectAnecdote.content}'`
+    // dispatch(addVotesOf(id))
+    const anecdote = anecdotes.find(a => a.id === id)
+    const votedAnecdote = {...anecdote, votes: anecdote.votes + 1}
+    dispatch(addVotesAction(id, votedAnecdote))
+    const message = `you voted '${anecdote.content}'`
     dispatch(createMessage(message))
     setTimeout(() => {
       dispatch(nullMessage())
