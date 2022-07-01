@@ -37,8 +37,13 @@
     },
     {
       "content": "Test Michael and Jenny",
-      "votes": 1,
+      "votes": 2,
       "id": "_RYiS08"
+    },
+    {
+      "content": "Test Michael and Michaela",
+      "votes": 1,
+      "id": "9d8QuRi"
     }
   ]
 }
