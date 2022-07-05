@@ -82,9 +82,9 @@ const Notification = ({ message }) => {
 }
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const { reset: contentReset, ...content} = useField('text')
+  const { reset: authorReset, ...author} = useField('text')
+  const { reset: infoReset, ...info} = useField('text')
 
   const navigate = useNavigate()
 
@@ -102,10 +102,9 @@ const CreateNew = (props) => {
   const handleReset = (e) => {
     e.preventDefault()
 
-    // dirty fix. This button event has the event.target.value as spaces which is getting passed to the hook property and in turn setting the value.
-    content.onChange(e)
-    author.onChange(e)
-    info.onChange(e)
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
