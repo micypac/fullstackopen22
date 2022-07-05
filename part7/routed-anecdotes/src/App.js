@@ -6,7 +6,7 @@ import {
   useMatch,
   useNavigate
 } from 'react-router-dom'
-import { useField } from './hooks/hooks'
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -99,6 +99,15 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
+  const handleReset = (e) => {
+    e.preventDefault()
+
+    // dirty fix. This button event has the event.target.value as spaces which is getting passed to the hook property and in turn setting the value.
+    content.onChange(e)
+    author.onChange(e)
+    info.onChange(e)
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -116,6 +125,7 @@ const CreateNew = (props) => {
           <input name='info' {...info} />
         </div>
         <button>create</button>
+        <button type='button' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
