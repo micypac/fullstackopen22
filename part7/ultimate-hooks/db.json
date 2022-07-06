@@ -1,0 +1,46 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are great",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "michael and monica grace",
+      "id": 3
+    },
+    {
+      "content": "test1",
+      "id": 4
+    },
+    {
+      "content": "teest2",
+      "id": 5
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "jenny",
+      "number": "951-220-9087",
+      "id": 3
+    },
+    {
+      "name": "monica grace",
+      "number": "201-999-3456",
+      "id": 4
+    }
+  ]
+}
