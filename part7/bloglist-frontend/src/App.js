@@ -5,6 +5,8 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/messageReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,8 +15,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const [message, setMessage] = useState(null)
+  // const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('added')
+
+  const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
@@ -55,10 +59,15 @@ const App = () => {
     } catch (exception) {
       console.log(exception)
       setMessageType('error')
-      setMessage(exception.response.data.error)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+
+      /*
+        Solution for exer#7.10.
+      */
+      // setMessage(exception.response.data.error)
+      // setTimeout(() => {
+      //   setMessage(null)
+      // }, 5000)
+      dispatch(setNotification(exception.response.data.error, 5))
     }
   }
 
@@ -76,12 +85,18 @@ const App = () => {
     setBlogs(blogs.concat(returnedBlog))
 
     setMessageType('added')
-    setMessage(
-      `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-    )
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
+
+    /*
+      Solution for exer#7.10.
+    */
+    // setMessage(
+    //   `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+    // )
+    // setTimeout(() => {
+    //   setMessage(null)
+    // }, 5000)
+    const message = `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
+    dispatch(setNotification(message, 5))
 
     blogFormRef.current.toggleVisibility()
   }
@@ -137,7 +152,8 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        <Notification message={message} displayClass={messageType} />
+        {/* <Notification message={message} displayClass={messageType} /> */}
+        <Notification displayClass={messageType} />
         {loginForm()}
       </div>
     )
@@ -145,7 +161,8 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>
-        <Notification message={message} displayClass={messageType} />
+        {/* <Notification message={message} displayClass={messageType} /> */}
+        <Notification displayClass={messageType} />
         <p>
           {user.name} logged in{' '}
           <button id="logout-button" onClick={handleLogout} type="button">
