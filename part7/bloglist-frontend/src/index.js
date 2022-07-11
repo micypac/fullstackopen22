@@ -9,7 +9,7 @@ import messageReducer from './reducers/messageReducer'
 
 const store = configureStore({
   reducer: {
-    message: messageReducer,
+    notification: messageReducer,
   },
 })
 

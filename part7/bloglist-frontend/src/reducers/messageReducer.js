@@ -1,9 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = null
+const initialState = {
+  message: null,
+  className: 'added',
+}
 
 const messageSlice = createSlice({
-  name: 'message',
+  name: 'notification',
   initialState: initialState,
   reducers: {
     createMessage(state, action) {
@@ -11,7 +14,7 @@ const messageSlice = createSlice({
       return state
     },
     nullMessage(state) {
-      state = null
+      state = initialState
       return state
     },
   },

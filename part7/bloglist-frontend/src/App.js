@@ -15,9 +15,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  // const [message, setMessage] = useState(null)
-  const [messageType, setMessageType] = useState('added')
-
   const dispatch = useDispatch()
 
   const blogFormRef = useRef()
@@ -57,17 +54,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log(exception)
-      setMessageType('error')
+      // console.log(exception)
 
-      /*
-        Solution for exer#7.10.
-      */
-      // setMessage(exception.response.data.error)
-      // setTimeout(() => {
-      //   setMessage(null)
-      // }, 5000)
-      dispatch(setNotification(exception.response.data.error, 5))
+      const notice = {
+        message: exception.response.data.error,
+        className: 'error',
+      }
+      dispatch(setNotification(notice, 5))
     }
   }
 
@@ -84,19 +77,12 @@ const App = () => {
     const returnedBlog = await blogService.create(blogObject)
     setBlogs(blogs.concat(returnedBlog))
 
-    setMessageType('added')
+    const notice = {
+      message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+      className: 'added',
+    }
 
-    /*
-      Solution for exer#7.10.
-    */
-    // setMessage(
-    //   `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-    // )
-    // setTimeout(() => {
-    //   setMessage(null)
-    // }, 5000)
-    const message = `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
-    dispatch(setNotification(message, 5))
+    dispatch(setNotification(notice, 5))
 
     blogFormRef.current.toggleVisibility()
   }
@@ -152,8 +138,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        {/* <Notification message={message} displayClass={messageType} /> */}
-        <Notification displayClass={messageType} />
+        <Notification />
         {loginForm()}
       </div>
     )
@@ -161,8 +146,7 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>
-        {/* <Notification message={message} displayClass={messageType} /> */}
-        <Notification displayClass={messageType} />
+        <Notification />
         <p>
           {user.name} logged in{' '}
           <button id="logout-button" onClick={handleLogout} type="button">
