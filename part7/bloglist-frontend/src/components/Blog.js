@@ -11,10 +11,11 @@ const Blog = ({ blog, user, incLikes, removeBlog }) => {
   }
 
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    padding: 10,
     border: 'solid',
-    borderWidth: 1,
+    borderColor: 'silver',
+    borderRadius: 5,
+    borderWidth: 3,
     marginBottom: 5,
   }
 

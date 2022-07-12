@@ -1,15 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+// import Blog from './components/Blog'
+import Blogs from './components/BlogList'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import { useDispatch } from 'react-redux'
+
 import { setNotification } from './reducers/messageReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -19,14 +22,18 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const sortBlogs = (arr) => {
-    const newArr = [...arr]
-    newArr.sort((a, b) => b.likes - a.likes)
-    return newArr
-  }
+  // const sortBlogs = (arr) => {
+  //   const newArr = [...arr]
+  //   newArr.sort((a, b) => b.likes - a.likes)
+  //   return newArr
+  // }
+
+  // useEffect(() => {
+  //   blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
+  // }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -73,36 +80,36 @@ const App = () => {
     setPassword('')
   }
 
-  const addBlog = async (blogObject) => {
-    const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
+  // const addBlog = async (blogObject) => {
+  //   const returnedBlog = await blogService.create(blogObject)
+  //   setBlogs(blogs.concat(returnedBlog))
 
-    const notice = {
-      message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-      className: 'added',
-    }
+  //   const notice = {
+  //     message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+  //     className: 'added',
+  //   }
 
-    dispatch(setNotification(notice, 5))
+  //   dispatch(setNotification(notice, 5))
 
-    blogFormRef.current.toggleVisibility()
-  }
+  //   blogFormRef.current.toggleVisibility()
+  // }
 
-  const deleteBlog = async (id) => {
-    const blog = blogs.find((blog) => blog.id === id)
+  // const deleteBlog = async (id) => {
+  //   const blog = blogs.find((blog) => blog.id === id)
 
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
-    }
-  }
+  //   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+  //     await blogService.remove(id)
+  //     setBlogs(blogs.filter((blog) => blog.id !== id))
+  //   }
+  // }
 
-  const incrementLikes = async (id) => {
-    const blog = blogs.find((blog) => blog.id === id)
-    const updatedBlog = { ...blog, likes: (blog.likes += 1) }
+  // const incrementLikes = async (id) => {
+  //   const blog = blogs.find((blog) => blog.id === id)
+  //   const updatedBlog = { ...blog, likes: (blog.likes += 1) }
 
-    const returnedBlog = await blogService.update(id, updatedBlog)
-    setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
-  }
+  //   const returnedBlog = await blogService.update(id, updatedBlog)
+  //   setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
+  // }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -155,10 +162,12 @@ const App = () => {
         </p>
 
         <Togglable buttonLabel="new blog" ref={blogFormRef}>
-          <BlogForm createBlog={addBlog} />
+          {/* <BlogForm createBlog={addBlog} /> */}
+          <BlogForm blogFormRef={blogFormRef} />
         </Togglable>
         <br />
-        {blogs.map((blog) => (
+        <Blogs user={user} />
+        {/* {blogs.map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
@@ -166,7 +175,7 @@ const App = () => {
             incLikes={() => incrementLikes(blog.id)}
             removeBlog={() => deleteBlog(blog.id)}
           />
-        ))}
+        ))} */}
       </div>
     )
   }

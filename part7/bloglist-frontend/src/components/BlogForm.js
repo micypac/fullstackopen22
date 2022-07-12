@@ -1,6 +1,11 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlogAction } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/messageReducer'
 
 const BlogForm = (props) => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -20,15 +25,26 @@ const BlogForm = (props) => {
   const addBlog = (event) => {
     event.preventDefault()
 
-    props.createBlog({
-      title: title,
-      author: author,
-      url: url,
-    })
+    dispatch(
+      createBlogAction({
+        title: title,
+        author: author,
+        url: url,
+      }),
+    )
+
+    const notice = {
+      message: `a new blog ${title} by ${author} added`,
+      className: 'added',
+    }
+
+    dispatch(setNotification(notice, 5))
 
     setTitle('')
     setAuthor('')
     setUrl('')
+
+    props.blogFormRef.current.toggleVisibility()
   }
 
   return (
@@ -40,7 +56,7 @@ const BlogForm = (props) => {
           <input
             id="title"
             type="text"
-            name="Title"
+            name="title"
             value={title}
             onChange={handleTitleChange}
             placeholder="blog title"
@@ -51,7 +67,7 @@ const BlogForm = (props) => {
           <input
             id="author"
             type="text"
-            name="Title"
+            name="author"
             value={author}
             onChange={handleAuthorChange}
             placeholder="blog author"
@@ -62,7 +78,7 @@ const BlogForm = (props) => {
           <input
             id="url"
             type="text"
-            name="Url"
+            name="url"
             value={url}
             onChange={handleUrlChange}
             placeholder="blog url"
