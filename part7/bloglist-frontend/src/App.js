@@ -6,17 +6,19 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { setNotification } from './reducers/messageReducer'
 import { initializeBlogs } from './reducers/blogsReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
   // const [blogs, setBlogs] = useState([])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
 
@@ -41,7 +43,8 @@ const App = () => {
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      // setUser(user)
+      dispatch(setUser(user))
 
       blogService.setToken(user.token)
     }
@@ -57,7 +60,8 @@ const App = () => {
       })
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-      setUser(user)
+      // setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -75,7 +79,8 @@ const App = () => {
     event.preventDefault()
 
     window.localStorage.clear()
-    setUser(null)
+    // setUser(null)
+    dispatch(setUser(null))
     setUsername('')
     setPassword('')
   }
