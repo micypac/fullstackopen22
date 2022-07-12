@@ -1,4 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { addLikesAction, removeBlogAction } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/messageReducer'
 
 import Blog from './Blog'
 
@@ -6,24 +8,32 @@ const Blogs = ({ user }) => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
 
-  console.log(dispatch)
   const deleteBlog = async (id) => {
-    console.log(id)
-    // const blog = blogs.find((blog) => blog.id === id)
+    const blog = blogs.find((blog) => blog.id === id)
 
-    // if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-    //   await blogService.remove(id)
-    //   setBlogs(blogs.filter((blog) => blog.id !== id))
-    // }
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      dispatch(removeBlogAction(id))
+
+      const notice = {
+        message: `you deleted blog ${blog.title} by ${blog.author}`,
+        className: 'update',
+      }
+
+      dispatch(setNotification(notice, 5))
+    }
   }
 
   const incrementLikes = async (id) => {
-    console.log(id)
-    // const blog = blogs.find((blog) => blog.id === id)
-    // const updatedBlog = { ...blog, likes: (blog.likes += 1) }
+    const blog = blogs.find((blog) => blog.id === id)
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+    dispatch(addLikesAction(id, updatedBlog))
 
-    // const returnedBlog = await blogService.update(id, updatedBlog)
-    // setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
+    const notice = {
+      message: `you liked ${updatedBlog.title} by ${updatedBlog.author}`,
+      className: 'update',
+    }
+
+    dispatch(setNotification(notice, 5))
   }
 
   return (
