@@ -10,6 +10,8 @@ import messageReducer from './reducers/messageReducer'
 import userReducer from './reducers/userReducer'
 import userListReducer from './reducers/userListReducer'
 
+import { BrowserRouter as Router } from 'react-router-dom'
+
 const store = configureStore({
   reducer: {
     blogs: blogsReducer,
@@ -21,6 +23,8 @@ const store = configureStore({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
 )

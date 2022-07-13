@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
+import User from './components/User'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
@@ -9,10 +10,15 @@ import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 
 import { initializeBlogs } from './reducers/blogsReducer'
-// import { initializeUsers } from './reducers/userListReducer'
+import { initializeUsers } from './reducers/userListReducer'
 import { setUser } from './reducers/userReducer'
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import {
+  // BrowserRouter as Router,
+  Routes,
+  Route,
+  useMatch,
+} from 'react-router-dom'
 
 const App = () => {
   const user = useSelector((state) => state.user)
@@ -21,11 +27,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [])
-
-  // useEffect(() => {
-  //   dispatch(initializeUsers())
-  // })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -38,6 +41,13 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const registeredUsers = useSelector((state) => state.users)
+
+  const match = useMatch('/users/:id')
+  const userProfile = match
+    ? registeredUsers.find((user) => user.id === match.params.id)
+    : null
 
   const handleLogout = async (event) => {
     event.preventDefault()
@@ -81,12 +91,14 @@ const App = () => {
             </button>
           </div>
         </header>
-        <Router>
-          <Routes>
-            <Route path="/" element={<BlogsContent />} />
-            <Route path="/users" element={<UserList />} />
-          </Routes>
-        </Router>
+
+        {/* <Router> */}
+        <Routes>
+          <Route path="/" element={<BlogsContent />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id" element={<User user={userProfile} />} />
+        </Routes>
+        {/* </Router> */}
       </div>
     )
   }
