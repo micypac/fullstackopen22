@@ -4,7 +4,7 @@ import { setNotification } from '../reducers/messageReducer'
 
 import Blog from './Blog'
 
-const Blogs = ({ user }) => {
+const BlogList = ({ user }) => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
 
@@ -51,4 +51,4 @@ const Blogs = ({ user }) => {
   )
 }
 
-export default Blogs
+export default BlogList
