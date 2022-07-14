@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
+import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
@@ -44,9 +45,16 @@ const App = () => {
 
   const registeredUsers = useSelector((state) => state.users)
 
-  const match = useMatch('/users/:id')
-  const userProfile = match
-    ? registeredUsers.find((user) => user.id === match.params.id)
+  const userMatch = useMatch('/users/:id')
+  const userProfile = userMatch
+    ? registeredUsers.find((user) => user.id === userMatch.params.id)
+    : null
+
+  const blogs = useSelector((state) => state.blogs)
+
+  const blogMatch = useMatch('/blogs/:id')
+  const blog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null
 
   const handleLogout = async (event) => {
@@ -97,6 +105,7 @@ const App = () => {
           <Route path="/" element={<BlogsContent />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:id" element={<User user={userProfile} />} />
+          <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
         </Routes>
         {/* </Router> */}
       </div>

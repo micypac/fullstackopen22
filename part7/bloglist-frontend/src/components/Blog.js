@@ -1,52 +1,62 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { addLikesAction, removeBlogAction } from '../reducers/blogsReducer'
+import { setNotification } from '../reducers/messageReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, user, incLikes, removeBlog }) => {
-  const [visible, setVisible] = useState(false)
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch()
 
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const deleteBlog = async (id) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      dispatch(removeBlogAction(id))
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
+      const notice = {
+        message: `you deleted blog ${blog.title} by ${blog.author}`,
+        className: 'update',
+      }
+
+      dispatch(setNotification(notice, 5))
+    }
   }
 
-  const blogStyle = {
-    padding: 10,
-    border: 'solid',
-    borderColor: 'silver',
-    borderRadius: 5,
-    borderWidth: 3,
-    marginBottom: 5,
-  }
+  const incrementLikes = async (id) => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+    dispatch(addLikesAction(id, updatedBlog))
 
-  // console.log(blog)
+    const notice = {
+      message: `you liked ${updatedBlog.title} by ${updatedBlog.author}`,
+      className: 'update',
+    }
+
+    dispatch(setNotification(notice, 5))
+  }
 
   return (
-    <div className="blog" style={blogStyle}>
-      <span>
+    <div className="blog">
+      <h2>
         {blog.title} {blog.author}
-      </span>{' '}
-      <button id="toggle-button" onClick={toggleVisibility}>
-        {visible ? 'hide' : 'show'}
-      </button>
-      <div style={showWhenVisible}>
-        {blog.url}
-        <br />
-        <span id="likes-info">likes {blog.likes}</span>{' '}
-        <button id="like-button" onClick={incLikes}>
-          Like!
-        </button>
-        <br /> {blog.user ? blog.user.name : ''}
-        <br />{' '}
-        {blog.user ? (
-          blog.user.id === user.id ? (
-            <button id="remove-button" onClick={removeBlog}>
-              remove
-            </button>
-          ) : null
-        ) : (
-          ''
-        )}
+      </h2>
+
+      <div>
+        <a href={blog.url}>{blog.url}</a>
+        <p>
+          <span id="likes-info">likes {blog.likes}</span>{' '}
+          <button id="like-button" onClick={() => incrementLikes(blog.id)}>
+            Like!
+          </button>
+        </p>
+        <p>{blog.user ? `added by ${blog.user.name}` : ''}</p>
+        <p>
+          {blog.user ? (
+            blog.user.id === user.id ? (
+              <button id="remove-button" onClick={() => deleteBlog(blog.id)}>
+                remove
+              </button>
+            ) : null
+          ) : (
+            ''
+          )}
+        </p>
       </div>
     </div>
   )
