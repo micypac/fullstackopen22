@@ -31,6 +31,10 @@ const Blog = ({ blog, user }) => {
     dispatch(setNotification(notice, 5))
   }
 
+  if (!blog) {
+    return null
+  }
+
   return (
     <div className="blog">
       <h2>
@@ -40,7 +44,7 @@ const Blog = ({ blog, user }) => {
       <div>
         <a href={blog.url}>{blog.url}</a>
         <p>
-          <span id="likes-info">likes {blog.likes}</span>{' '}
+          <span>Likes: {blog.likes}</span>{' '}
           <button id="like-button" onClick={() => incrementLikes(blog.id)}>
             Like!
           </button>
@@ -65,8 +69,8 @@ const Blog = ({ blog, user }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  incLikes: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
+  // incLikes: PropTypes.func.isRequired,
+  // removeBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

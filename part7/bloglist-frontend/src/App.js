@@ -19,11 +19,14 @@ import {
   Routes,
   Route,
   useMatch,
+  useNavigate,
+  Link,
 } from 'react-router-dom'
 
 const App = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -62,6 +65,7 @@ const App = () => {
 
     window.localStorage.clear()
     dispatch(setUser(null))
+    navigate('/')
   }
 
   const BlogsContent = () => (
@@ -91,18 +95,28 @@ const App = () => {
       <div>
         <header>
           <h1>Blogs</h1>
-          <Notification />
-          <div>
-            <p>{user.name} logged in</p>
+          <div style={{ backgroundColor: 'lightgrey' }}>
+            <Link style={{ padding: 5 }} to="/">
+              Home
+            </Link>
+            <Link style={{ padding: 5 }} to="/blogs">
+              Blogs
+            </Link>
+            <Link style={{ padding: 5 }} to="/users">
+              Users
+            </Link>
+            <span style={{ fontStyle: 'italic' }}>{user.name} logged in </span>
             <button id="logout-button" onClick={handleLogout} type="button">
               logout
             </button>
           </div>
+          <Notification />
         </header>
 
         {/* <Router> */}
         <Routes>
           <Route path="/" element={<BlogsContent />} />
+          <Route path="/blogs" element={<BlogsContent />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:id" element={<User user={userProfile} />} />
           <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
