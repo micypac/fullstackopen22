@@ -70,7 +70,7 @@ const App = () => {
 
   const BlogsContent = () => (
     <div>
-      <div style={{ marginTop: 20 }}>
+      <div>
         <Togglable buttonLabel="new blog" ref={blogFormRef}>
           <BlogForm blogFormRef={blogFormRef} />
         </Togglable>
@@ -84,7 +84,7 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <div className="container">
         <h2>log in to application</h2>
         <Notification />
         <LoginForm />
@@ -92,7 +92,7 @@ const App = () => {
     )
   } else {
     return (
-      <div>
+      <div className="container">
         <header>
           <h1>Blogs</h1>
           <div style={{ backgroundColor: 'lightgrey' }}>
@@ -113,7 +113,6 @@ const App = () => {
           <Notification />
         </header>
 
-        {/* <Router> */}
         <Routes>
           <Route path="/" element={<BlogsContent />} />
           <Route path="/blogs" element={<BlogsContent />} />
@@ -121,7 +120,6 @@ const App = () => {
           <Route path="/users/:id" element={<User user={userProfile} />} />
           <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
         </Routes>
-        {/* </Router> */}
       </div>
     )
   }

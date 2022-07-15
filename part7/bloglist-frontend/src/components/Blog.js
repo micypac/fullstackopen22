@@ -16,7 +16,7 @@ const Blog = ({ blog, user }) => {
 
       const notice = {
         message: `you deleted blog ${blog.title} by ${blog.author}`,
-        className: 'update',
+        className: 'info',
       }
 
       dispatch(setNotification(notice, 5))
@@ -29,7 +29,7 @@ const Blog = ({ blog, user }) => {
 
     const notice = {
       message: `you liked ${updatedBlog.title} by ${updatedBlog.author}`,
-      className: 'update',
+      className: 'info',
     }
 
     dispatch(setNotification(notice, 5))
@@ -50,7 +50,7 @@ const Blog = ({ blog, user }) => {
 
     const notice = {
       message: `you added comment to ${blog.title}`,
-      className: 'added',
+      className: 'success',
     }
 
     dispatch(setNotification(notice, 5))

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlogAction } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/messageReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = (props) => {
   const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const BlogForm = (props) => {
 
     const notice = {
       message: `a new blog ${title} by ${author} added`,
-      className: 'added',
+      className: 'success',
     }
 
     dispatch(setNotification(notice, 5))
@@ -50,10 +51,10 @@ const BlogForm = (props) => {
   return (
     <div>
       <h2>Create New Blog</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title:
-          <input
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>Title:</Form.Label>
+          <Form.Control
             id="title"
             type="text"
             name="title"
@@ -61,10 +62,8 @@ const BlogForm = (props) => {
             onChange={handleTitleChange}
             placeholder="blog title"
           />
-        </div>
-        <div>
-          author:
-          <input
+          <Form.Label>Author:</Form.Label>
+          <Form.Control
             id="author"
             type="text"
             name="author"
@@ -72,10 +71,8 @@ const BlogForm = (props) => {
             onChange={handleAuthorChange}
             placeholder="blog author"
           />
-        </div>
-        <div>
-          url:
-          <input
+          <Form.Label>URL:</Form.Label>
+          <Form.Control
             id="url"
             type="text"
             name="url"
@@ -83,11 +80,12 @@ const BlogForm = (props) => {
             onChange={handleUrlChange}
             placeholder="blog url"
           />
-        </div>
-        <button id="submit-button" type="submit">
+        </Form.Group>
+
+        <Button id="submit-button" variant="primary" type="submit">
           create
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   )
 }

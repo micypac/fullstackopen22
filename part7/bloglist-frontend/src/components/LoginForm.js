@@ -3,6 +3,7 @@ import loginService from '../services/login'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/messageReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -21,10 +22,17 @@ const LoginForm = () => {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
 
       dispatch(setUser(user))
+
+      const notice = {
+        message: `Welcome ${user.username}`,
+        className: 'success',
+      }
+
+      dispatch(setNotification(notice, 5))
     } catch (exception) {
       const notice = {
         message: exception.response.data.error,
-        className: 'error',
+        className: 'danger',
       }
 
       dispatch(setNotification(notice, 5))
@@ -35,33 +43,30 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
+    <Form onSubmit={handleLogin}>
+      <Form.Group>
+        <Form.Label>Username:</Form.Label>
+        <Form.Control
           id="username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-
-      <div>
-        password
-        <input
+        <Form.Label>Password:</Form.Label>
+        <Form.Control
           id="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
+      </Form.Group>
 
-      <button id="login-button" type="submit">
+      <Button id="login-button" variant="primary" type="submit">
         login
-      </button>
-    </form>
+      </Button>
+    </Form>
   )
 }
 
