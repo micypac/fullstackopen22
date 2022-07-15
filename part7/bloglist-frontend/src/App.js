@@ -14,14 +14,8 @@ import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/userListReducer'
 import { setUser } from './reducers/userReducer'
 
-import {
-  // BrowserRouter as Router,
-  Routes,
-  Route,
-  useMatch,
-  useNavigate,
-  Link,
-} from 'react-router-dom'
+import { Routes, Route, useMatch, useNavigate, Link } from 'react-router-dom'
+import { Navbar, Nav, Container, Button } from 'react-bootstrap'
 
 const App = () => {
   const user = useSelector((state) => state.user)
@@ -68,61 +62,131 @@ const App = () => {
     navigate('/')
   }
 
-  const BlogsContent = () => (
-    <div>
-      <div>
-        <Togglable buttonLabel="new blog" ref={blogFormRef}>
-          <BlogForm blogFormRef={blogFormRef} />
-        </Togglable>
-      </div>
-
-      <div>
-        <BlogList user={user} />
-      </div>
-    </div>
-  )
-
-  if (user === null) {
+  const BlogsContent = () => {
     return (
       <div className="container">
-        <h2>log in to application</h2>
-        <Notification />
-        <LoginForm />
-      </div>
-    )
-  } else {
-    return (
-      <div className="container">
-        <header>
-          <h1>Blogs</h1>
-          <div style={{ backgroundColor: 'lightgrey' }}>
-            <Link style={{ padding: 5 }} to="/">
-              Home
-            </Link>
-            <Link style={{ padding: 5 }} to="/blogs">
-              Blogs
-            </Link>
-            <Link style={{ padding: 5 }} to="/users">
-              Users
-            </Link>
-            <span style={{ fontStyle: 'italic' }}>{user.name} logged in </span>
-            <button id="logout-button" onClick={handleLogout} type="button">
-              logout
-            </button>
-          </div>
-          <Notification />
-        </header>
+        <div>
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogForm blogFormRef={blogFormRef} />
+          </Togglable>
+        </div>
 
-        <Routes>
-          <Route path="/" element={<BlogsContent />} />
-          <Route path="/blogs" element={<BlogsContent />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/:id" element={<User user={userProfile} />} />
-          <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
-        </Routes>
+        <div>
+          <BlogList user={user} />
+        </div>
       </div>
     )
   }
+
+  const Home = () => (
+    <Container>
+      <h1> Blog App</h1>
+      <p>
+        This entire application serves as a project exercise from Fullstackopen
+        course. The course is an introduction to modern web application
+        development with JavaScript. The main focus is on building single page
+        applications with ReactJS that use REST APIs built with Node.js. The
+        course also contains a section on GraphQL, a modern alternative to REST
+        APIs.
+      </p>
+      <p>
+        The course covers testing, configuration and environment management, and
+        the use of MongoDB for storing the application’s data.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+        mollit anim id est laborum.
+      </p>
+    </Container>
+  )
+
+  // if (user === null) {
+  //   return (
+  //     <div className="container">
+  //       <h2>log in to application</h2>
+  //       <Notification />
+  //       <LoginForm />
+  //     </div>
+  //   )
+  // } else {
+  return (
+    <div className="container">
+      <header>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Container fluid>
+            <Navbar.Brand href="#" as="span">
+              Blog App
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="#" as="span">
+                  <Link style={{ padding: 5 }} to="/">
+                    Home
+                  </Link>
+                </Nav.Link>
+
+                {user ? (
+                  <Nav>
+                    <Nav.Link href="#" as="span">
+                      <Link style={{ padding: 5 }} to="/blogs">
+                        Blogs
+                      </Link>
+                    </Nav.Link>
+                    <Nav.Link href="#" as="span">
+                      <Link style={{ padding: 5 }} to="/users">
+                        Users
+                      </Link>
+                    </Nav.Link>
+
+                    <Navbar.Text>
+                      <span style={{ fontStyle: 'italic', padding: 5 }}>
+                        {user.name} logged in{' '}
+                      </span>
+                    </Navbar.Text>
+                  </Nav>
+                ) : (
+                  <Nav.Link href="#" as="span">
+                    <Link style={{ padding: 5 }} to="/login">
+                      Login
+                    </Link>
+                  </Nav.Link>
+                )}
+
+                {user ? (
+                  <Button
+                    id="logout-button"
+                    onClick={handleLogout}
+                    type="button"
+                    variant="primary"
+                  >
+                    logout
+                  </Button>
+                ) : null}
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+
+        <Notification />
+      </header>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blogs" element={<BlogsContent />} />
+        <Route path="/users" element={<UserList />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/users/:id" element={<User user={userProfile} />} />
+        <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
+      </Routes>
+    </div>
+  )
+  // }
 }
 
 export default App

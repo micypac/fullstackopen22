@@ -4,9 +4,11 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/messageReducer'
 import { Form, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -29,6 +31,7 @@ const LoginForm = () => {
       }
 
       dispatch(setNotification(notice, 5))
+      navigate('/')
     } catch (exception) {
       const notice = {
         message: exception.response.data.error,
@@ -63,7 +66,12 @@ const LoginForm = () => {
         />
       </Form.Group>
 
-      <Button id="login-button" variant="primary" type="submit">
+      <Button
+        id="login-button"
+        variant="primary"
+        type="submit"
+        style={{ marginTop: 10 }}
+      >
         login
       </Button>
     </Form>
