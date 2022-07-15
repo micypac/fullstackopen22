@@ -1,5 +1,9 @@
-import PropTypes from 'prop-types'
-import { addLikesAction, removeBlogAction } from '../reducers/blogsReducer'
+// import PropTypes from 'prop-types'
+import {
+  addLikesAction,
+  removeBlogAction,
+  addCommentAction,
+} from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/messageReducer'
 import { useDispatch } from 'react-redux'
 
@@ -26,6 +30,27 @@ const Blog = ({ blog, user }) => {
     const notice = {
       message: `you liked ${updatedBlog.title} by ${updatedBlog.author}`,
       className: 'update',
+    }
+
+    dispatch(setNotification(notice, 5))
+  }
+
+  const addComment = (event) => {
+    // event.preventDefault()
+
+    const commentText = event.target.comment.value
+    const blogId = event.target.blogId.value
+
+    const commentObj = {
+      content: commentText,
+    }
+
+    dispatch(addCommentAction(blogId, commentObj))
+    event.target.comment.value = ''
+
+    const notice = {
+      message: `you added comment to ${blog.title}`,
+      className: 'added',
     }
 
     dispatch(setNotification(notice, 5))
@@ -63,6 +88,13 @@ const Blog = ({ blog, user }) => {
         </p>
 
         <h3>Comments</h3>
+
+        <form onSubmit={addComment}>
+          <input name="comment" />
+          <input type="hidden" name="blogId" value={blog.id} />
+          <button type="submit">add comment</button>
+        </form>
+
         <ul>
           {blog.comments.map((comment) => (
             <li key={comment.id}>{comment.content}</li>
@@ -73,11 +105,11 @@ const Blog = ({ blog, user }) => {
   )
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  // incLikes: PropTypes.func.isRequired,
-  // removeBlog: PropTypes.func.isRequired,
-}
+// Blog.propTypes = {
+//   blog: PropTypes.object.isRequired,
+//   user: PropTypes.object.isRequired,
+//   // incLikes: PropTypes.func.isRequired,
+//   // removeBlog: PropTypes.func.isRequired,
+// }
 
 export default Blog
