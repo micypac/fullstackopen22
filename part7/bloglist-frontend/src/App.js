@@ -1,12 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 
@@ -21,7 +19,6 @@ const App = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const blogFormRef = useRef()
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -62,22 +59,6 @@ const App = () => {
     navigate('/')
   }
 
-  const BlogsContent = () => {
-    return (
-      <div className="container">
-        <div>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm blogFormRef={blogFormRef} />
-          </Togglable>
-        </div>
-
-        <div>
-          <BlogList user={user} />
-        </div>
-      </div>
-    )
-  }
-
   const Home = () => (
     <Container>
       <h1> Blog App</h1>
@@ -105,15 +86,6 @@ const App = () => {
     </Container>
   )
 
-  // if (user === null) {
-  //   return (
-  //     <div className="container">
-  //       <h2>log in to application</h2>
-  //       <Notification />
-  //       <LoginForm />
-  //     </div>
-  //   )
-  // } else {
   return (
     <div className="container">
       <header>
@@ -145,7 +117,13 @@ const App = () => {
                     </Nav.Link>
 
                     <Navbar.Text>
-                      <span style={{ fontStyle: 'italic', padding: 5 }}>
+                      <span
+                        style={{
+                          fontStyle: 'italic',
+                          padding: 5,
+                          marginRight: 10,
+                        }}
+                      >
                         {user.name} logged in{' '}
                       </span>
                     </Navbar.Text>
@@ -163,7 +141,7 @@ const App = () => {
                     id="logout-button"
                     onClick={handleLogout}
                     type="button"
-                    variant="primary"
+                    variant="secondary"
                   >
                     logout
                   </Button>
@@ -175,18 +153,18 @@ const App = () => {
 
         <Notification />
       </header>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/blogs" element={<BlogsContent />} />
-        <Route path="/users" element={<UserList />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/users/:id" element={<User user={userProfile} />} />
-        <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
-      </Routes>
+      <main style={{ marginTop: 20 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blogs" element={<BlogList />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/users/:id" element={<User user={userProfile} />} />
+          <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
+        </Routes>
+      </main>
     </div>
   )
-  // }
 }
 
 export default App

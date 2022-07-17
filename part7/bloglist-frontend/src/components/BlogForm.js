@@ -48,6 +48,10 @@ const BlogForm = (props) => {
     props.blogFormRef.current.toggleVisibility()
   }
 
+  const handleCancel = () => {
+    props.blogFormRef.current.toggleVisibility()
+  }
+
   return (
     <div>
       <h2>Create New Blog</h2>
@@ -82,9 +86,24 @@ const BlogForm = (props) => {
           />
         </Form.Group>
 
-        <Button id="submit-button" variant="primary" type="submit">
-          create
-        </Button>
+        <div style={{ marginTop: 15, marginBottom: 15 }}>
+          <Button
+            id="submit-button"
+            variant="primary"
+            type="submit"
+            style={{ marginRight: 15 }}
+          >
+            create
+          </Button>
+          <Button
+            id="cancel-button"
+            variant="secondary"
+            type="button"
+            onClick={() => handleCancel()}
+          >
+            cancel
+          </Button>
+        </div>
       </Form>
     </div>
   )
