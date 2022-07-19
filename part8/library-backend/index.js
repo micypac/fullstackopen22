@@ -111,18 +111,15 @@ const resolvers = {
       console.log(args)
       if (!args.author && !args.genre) return books
 
-      if (args.author) {
-        return books.filter((book) =>
-          book.author === args.author ? book : null,
-        )
-      } else if (args.genre) {
+      if (args.author && args.genre) {
         return books.filter((book) => {
-          if (book.genres.includes(args.genre)) {
+          if (book.author === args.author && book.genres.includes(args.genre))
             return book
-          } else {
-            return null
-          }
         })
+      } else if (args.genre && !args.author) {
+        return books.filter((book) => book.genres.includes(args.genre))
+      } else {
+        return books.filter((book) => book.author === args.author)
       }
     },
     allAuthors: () => authors,
