@@ -101,6 +101,15 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
+  }
 `
 
 const resolvers = {
@@ -108,7 +117,6 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      console.log(args)
       if (!args.author && !args.genre) return books
 
       if (args.author && args.genre) {
@@ -131,6 +139,15 @@ const resolvers = {
         (count, book) => (book.author === root.name ? count + 1 : count),
         0,
       )
+    },
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      const author = { name: book.author, id: uuid() }
+      authors = authors.concat(author)
+      return book
     },
   },
 }
