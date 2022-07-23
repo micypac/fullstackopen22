@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.10.0",
-    "graphql": "^16.5.0"
+    "graphql": "^16.5.0",
+    "mongoose": "^6.4.6"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",
