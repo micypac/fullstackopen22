@@ -137,21 +137,42 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
-    allBooks: (root, args) => {
-      if (!args.author && !args.genre) return books
-
-      if (args.author && args.genre) {
-        return books.filter((book) => {
-          if (book.author === args.author && book.genres.includes(args.genre))
-            return book
-        })
-      } else if (args.genre && !args.author) {
-        return books.filter((book) => book.genres.includes(args.genre))
-      } else {
-        return books.filter((book) => book.author === args.author)
+    allBooks: async (root, args) => {
+      if (!args.author && !args.genre) {
+        return Book.find({})
       }
+
+      // Author or genre filters
+      if (args.author && args.genre) {
+        const query = { author: args.author, genres: { $in: args.genre } }
+        return Book.find(query)
+      } else if (args.author && !args.genre) {
+        const query = { author: args.author }
+        return Book.find(query)
+      } else {
+        const query = { genres: { $in: args.genre } }
+        return Book.find(query)
+      }
+
+      // if (args.author && args.genre) {
+      //   return books.filter((book) => {
+      //     if (book.author === args.author && book.genres.includes(args.genre))
+      //       return book
+      //   })
+      // } else if (args.genre && !args.author) {
+      //   return books.filter((book) => book.genres.includes(args.genre))
+      // } else {
+      //   return books.filter((book) => book.author === args.author)
+      // }
     },
     allAuthors: async () => Author.find({}),
+  },
+  Book: {
+    author: async (root) => {
+      // console.log('***Book Object Resolver***', root)
+      const query = { _id: root.author }
+      return Author.findOne(query)
+    },
   },
   Author: {
     bookCount: async (root) => {
