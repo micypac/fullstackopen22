@@ -151,15 +151,13 @@ const resolvers = {
         return books.filter((book) => book.author === args.author)
       }
     },
-    allAuthors: () => authors,
+    allAuthors: async () => Author.find({}),
   },
   Author: {
-    bookCount: (root) => {
-      console.log(root)
-      return books.reduce(
-        (count, book) => (book.author === root.name ? count + 1 : count),
-        0,
-      )
+    bookCount: async (root) => {
+      // console.log('***Author Object Resolver***', root)
+      const query = { author: root._id }
+      return Book.collection.countDocuments(query)
     },
   },
   Mutation: {
