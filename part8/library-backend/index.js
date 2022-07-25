@@ -106,9 +106,11 @@ const resolvers = {
         try {
           author = await newAuthor.save()
         } catch (error) {
-          throw new UserInputError(error.message, {
-            ivalidArgs: args,
-          })
+          throw new UserInputError(error.message)
+
+          // throw new UserInputError(error.message, {
+          //   invalidArgs: args,
+          // })
         }
       }
 
@@ -118,9 +120,7 @@ const resolvers = {
         await book.populate('author', { name: 1 })
         await book.save()
       } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
+        throw new UserInputError(error.message)
       }
 
       return book
@@ -135,9 +135,7 @@ const resolvers = {
       try {
         await author.save()
       } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
+        throw new UserInputError(error.message)
       }
 
       return author
