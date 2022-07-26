@@ -59,30 +59,34 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h3>Set Birthyear</h3>
+
       <form onSubmit={handleSubmit}>
-        {/* <div>
-          name
-          <input
+        <fieldset disabled={props.token ? false : true}>
+          <legend>
+            <h3>Set Birthyear</h3>
+          </legend>
+          <label htmlFor="author">Author:</label>
+          <select
+            name="author"
             value={name}
             onChange={(event) => setName(event.target.value)}
-          />
-        </div> */}
-        <select value={name} onChange={(event) => setName(event.target.value)}>
-          {authors.map((a) => (
-            <option key={a.name} value={a.name}>
-              {a.name}
-            </option>
-          ))}
-        </select>
-        <div>
-          born
-          <input
-            value={born}
-            onChange={(event) => setBorn(event.target.value)}
-          />
-        </div>
-        <button type="submit">update author</button>
+          >
+            {authors.map((a) => (
+              <option key={a.name} value={a.name}>
+                {a.name}
+              </option>
+            ))}
+          </select>
+          <div>
+            <label htmlFor="birthyear">Born:</label>
+            <input
+              name="birthyear"
+              value={born}
+              onChange={(event) => setBorn(event.target.value)}
+            />
+          </div>
+          <button type="submit">update author</button>
+        </fieldset>
       </form>
     </div>
   )
