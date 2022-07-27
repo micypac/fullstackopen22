@@ -1,34 +1,24 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS, BOOKS_BY_GENRE } from '../queries'
+import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
-  const [genreFilter, setGenreFilter] = useState('all')
   const result = useQuery(ALL_BOOKS)
-
-  const resultBookByGenre = useQuery(BOOKS_BY_GENRE, {
-    variables: {
-      genre: genreFilter,
-    },
-    skip: genreFilter === 'all',
-  })
+  const [genreFilter, setGenreFilter] = useState('all')
 
   if (!props.show) {
     return null
   }
 
-  if (result.loading || resultBookByGenre.loading) {
-    return <div>query loading...</div>
+  // const books = []
+
+  if (result.loading) {
+    return <div>loading...</div>
   }
 
+  // console.log(result)
+
   const books = result.data.allBooks
-  if (!resultBookByGenre.loading) {
-    console.log(resultBookByGenre)
-  }
-  const booksByGenre =
-    genreFilter !== 'all' && !resultBookByGenre.loading
-      ? resultBookByGenre.data.allBooks
-      : null
   const genres = books.reduce((acc, element) => {
     for (const genre of element.genres) {
       if (!acc.includes(genre)) {
@@ -39,16 +29,14 @@ const Books = (props) => {
   }, [])
 
   // console.log(genres)
-  // console.log(genreFilter)
+  console.log(genreFilter)
 
-  // let booksList
-  // if (genreFilter === 'all') {
-  //   booksList = books
-  // } else {
-  //   booksList = books.filter((book) => book.genres.includes(genreFilter))
-  // }
-
-  const booksList = genreFilter === 'all' ? books : booksByGenre
+  let booksList
+  if (genreFilter === 'all') {
+    booksList = books
+  } else {
+    booksList = books.filter((book) => book.genres.includes(genreFilter))
+  }
 
   return (
     <div>
