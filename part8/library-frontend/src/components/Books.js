@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
+  const [genreFilter, setGenreFilter] = useState('all')
 
   if (!props.show) {
     return null
@@ -17,10 +19,20 @@ const Books = (props) => {
   console.log(result)
 
   const books = result.data.allBooks
+  const genres = books.reduce((acc, element) => {
+    for (const genre of element.genres) {
+      if (!acc.includes(genre)) {
+        acc.push(genre)
+      }
+    }
+    return acc
+  }, [])
+
+  console.log(genres)
 
   return (
     <div>
-      <h2>books</h2>
+      <h2>Books</h2>
 
       <table>
         <tbody>
@@ -38,6 +50,22 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+
+      <fieldset>
+        <legend>
+          <h3>Genres</h3>
+        </legend>
+        <div>
+          <input type="radio" name="genres" value="all" id="all" />
+          <label htmlFor="all">all</label>
+        </div>
+        {genres.map((genre) => (
+          <div key={genre}>
+            <input type="radio" name="genres" value={genre} id={genre} />
+            <label htmlFor={genre}>{genre}</label>
+          </div>
+        ))}
+      </fieldset>
     </div>
   )
 }
