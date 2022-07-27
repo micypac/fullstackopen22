@@ -2,17 +2,19 @@ import { useQuery } from '@apollo/client'
 import { BOOKS_BY_GENRE, ME } from '../queries'
 
 const BookRecommendation = (props) => {
-  const resultUser = useQuery(ME)
+  const resultUser = useQuery(ME, {
+    skip: props.token === null,
+  })
   const resultBookByGenre = useQuery(BOOKS_BY_GENRE, {
-    skip: resultUser.loading,
+    skip: !resultUser.data,
     variables: {
-      genre: !resultUser.loading ? resultUser.data.me.favoriteGenre : '',
+      genre: resultUser.data ? resultUser.data.me.favoriteGenre : '',
     },
   })
 
   if (!props.show) return null
 
-  if (resultBookByGenre.loading) {
+  if (resultBookByGenre.loading || resultUser.loading) {
     return <div>loading...</div>
   }
 
