@@ -16,7 +16,7 @@ const Books = (props) => {
     return <div>loading...</div>
   }
 
-  console.log(result)
+  // console.log(result)
 
   const books = result.data.allBooks
   const genres = books.reduce((acc, element) => {
@@ -28,7 +28,15 @@ const Books = (props) => {
     return acc
   }, [])
 
-  console.log(genres)
+  // console.log(genres)
+  console.log(genreFilter)
+
+  let booksList
+  if (genreFilter === 'all') {
+    booksList = books
+  } else {
+    booksList = books.filter((book) => book.genres.includes(genreFilter))
+  }
 
   return (
     <div>
@@ -41,7 +49,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((book) => (
+          {booksList.map((book) => (
             <tr key={book.id}>
               <td>{book.title}</td>
               <td>{book.author.name}</td>
@@ -56,12 +64,26 @@ const Books = (props) => {
           <h3>Genres</h3>
         </legend>
         <div>
-          <input type="radio" name="genres" value="all" id="all" />
+          <input
+            type="radio"
+            name="genres"
+            value="all"
+            id="all"
+            checked={genreFilter === 'all'}
+            onChange={() => setGenreFilter('all')}
+          />
           <label htmlFor="all">all</label>
         </div>
         {genres.map((genre) => (
           <div key={genre}>
-            <input type="radio" name="genres" value={genre} id={genre} />
+            <input
+              type="radio"
+              name="genres"
+              value={genre}
+              id={genre}
+              checked={genreFilter === genre}
+              onChange={() => setGenreFilter(genre)}
+            />
             <label htmlFor={genre}>{genre}</label>
           </div>
         ))}
