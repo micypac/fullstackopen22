@@ -1,9 +1,9 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS, BOOKS_BY_GENRE } from '../queries'
 
-const Books = (props) => {
-  const [genreFilter, setGenreFilter] = useState('all')
+const Books = ({ show, genreFilter, setGenreFilter }) => {
+  // const [genreFilter, setGenreFilter] = useState('all')
   const result = useQuery(ALL_BOOKS)
 
   const resultBookByGenre = useQuery(BOOKS_BY_GENRE, {
@@ -13,7 +13,7 @@ const Books = (props) => {
     skip: genreFilter === 'all',
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -25,10 +25,12 @@ const Books = (props) => {
   if (!resultBookByGenre.loading) {
     console.log(resultBookByGenre)
   }
+
   const booksByGenre =
     genreFilter !== 'all' && !resultBookByGenre.loading
       ? resultBookByGenre.data.allBooks
       : null
+
   const genres = books.reduce((acc, element) => {
     for (const genre of element.genres) {
       if (!acc.includes(genre)) {
@@ -75,6 +77,7 @@ const Books = (props) => {
         <legend>
           <h3>Genres</h3>
         </legend>
+
         <div>
           <input
             type="radio"
@@ -86,6 +89,7 @@ const Books = (props) => {
           />
           <label htmlFor="all">all</label>
         </div>
+
         {genres.map((genre) => (
           <div key={genre}>
             <input

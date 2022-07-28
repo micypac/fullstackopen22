@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -9,7 +9,18 @@ import BookRecommendation from './components/BookRecommendation'
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+  const [genreFilter, setGenreFilter] = useState('all')
   const client = useApolloClient()
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('library-user-token')
+
+    if (token) {
+      setToken(token)
+    } else {
+      setToken(null)
+    }
+  }, [])
 
   const handleLogout = () => {
     setToken(null)
@@ -37,9 +48,13 @@ const App = () => {
 
       <Authors show={page === 'authors'} token={token} />
 
-      <Books show={page === 'books'} />
+      <Books
+        show={page === 'books'}
+        genreFilter={genreFilter}
+        setGenreFilter={setGenreFilter}
+      />
 
-      <NewBook show={page === 'add'} />
+      <NewBook show={page === 'add'} genreFilter={genreFilter} />
 
       <BookRecommendation show={page === 'favoriteGenre'} token={token} />
 
