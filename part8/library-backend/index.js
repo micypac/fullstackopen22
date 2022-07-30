@@ -1,6 +1,8 @@
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
+const { WebSocketServer } = require('ws')
+const { useServer } = require('graphql-ws/lib/use/ws')
 const express = require('express')
 const http = require('http')
 const mongoose = require('mongoose')
@@ -31,6 +33,13 @@ const start = async () => {
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
 
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '',
+  })
+
+  const serverCleanup = useServer({ schema }, wsServer)
+
   const server = new ApolloServer({
     schema,
     introspection: true,
@@ -44,7 +53,18 @@ const start = async () => {
         return { currentUser }
       }
     },
-    pugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    pugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose()
+            },
+          }
+        },
+      },
+    ],
   })
 
   await server.start()

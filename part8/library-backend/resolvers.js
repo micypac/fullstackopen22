@@ -1,4 +1,5 @@
 const { UserInputError, AuthenticationError } = require('apollo-server')
+const { PubSub } = require('graphql-subscriptions')
 const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
@@ -6,6 +7,7 @@ const User = require('./models/user')
 require('dotenv').config()
 
 const SECRET = process.env.JWT_SECRET
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -110,6 +112,8 @@ const resolvers = {
         throw new UserInputError(error.message)
       }
 
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+
       return book
     },
     editAuthor: async (root, args, { currentUser }) => {
@@ -130,6 +134,11 @@ const resolvers = {
       }
 
       return author
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 }
