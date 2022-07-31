@@ -5,11 +5,30 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import BookRecommendation from './components/BookRecommendation'
+import Notification from './components/Notification'
+
+export const updateCache = (cache, query, addedBook) => {
+  const uniqueByTitle = (books) => {
+    let seen = new Set()
+
+    return books.filter((book) => {
+      let bookTitle = book.title
+      return seen.has(bookTitle) ? false : seen.add(bookTitle)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqueByTitle(allBooks.concat(addedBook)),
+    }
+  })
+}
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const [genreFilter, setGenreFilter] = useState('all')
+  const [appMessage, setAppMessage] = useState(null)
   const client = useApolloClient()
 
   useEffect(() => {
@@ -29,6 +48,13 @@ const App = () => {
     setPage('authors')
   }
 
+  const notify = (message) => {
+    setAppMessage(message)
+    setTimeout(() => {
+      setAppMessage(null)
+    }, 5000)
+  }
+
   return (
     <div>
       <div>
@@ -46,6 +72,8 @@ const App = () => {
         )}
       </div>
 
+      <Notification appMessage={appMessage} />
+
       <Authors show={page === 'authors'} token={token} />
 
       <Books
@@ -54,7 +82,11 @@ const App = () => {
         setGenreFilter={setGenreFilter}
       />
 
-      <NewBook show={page === 'add'} genreFilter={genreFilter} />
+      <NewBook
+        show={page === 'add'}
+        genreFilter={genreFilter}
+        setMessage={notify}
+      />
 
       <BookRecommendation show={page === 'favoriteGenre'} token={token} />
 
