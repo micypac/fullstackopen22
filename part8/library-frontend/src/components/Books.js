@@ -1,6 +1,7 @@
 // import { useState } from 'react'
 import { useQuery, useSubscription, useApolloClient } from '@apollo/client'
 import { ALL_BOOKS, BOOKS_BY_GENRE, BOOK_ADDED } from '../queries'
+import { updateCache } from '../App'
 
 const Books = ({ show, genreFilter, setGenreFilter }) => {
   // const [genreFilter, setGenreFilter] = useState('all')
@@ -14,15 +15,31 @@ const Books = ({ show, genreFilter, setGenreFilter }) => {
     skip: genreFilter === 'all',
   })
 
+  // useSubscription(BOOK_ADDED, {
+  //   onSubscriptionData: ({ subscriptionData }) => {
+  //     const addedBook = subscriptionData.data.bookAdded
+
+  //     client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+  //       return {
+  //         allBooks: allBooks.concat(addedBook),
+  //       }
+  //     })
+  //   },
+  // })
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log('***Books useSubscription***')
       const addedBook = subscriptionData.data.bookAdded
-      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(addedBook),
-        }
-      })
+
+      if (genreFilter === 'all') {
+        updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+      } else {
+        updateCache(
+          client.cache,
+          { query: BOOKS_BY_GENRE, variables: { genre: genreFilter } },
+          addedBook,
+        )
+      }
     },
   })
 

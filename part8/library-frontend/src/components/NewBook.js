@@ -13,20 +13,22 @@ const NewBook = (props) => {
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [
       // { query: ALL_BOOKS },
-      { query: BOOKS_BY_GENRE, variables: { genre: props.genreFilter } },
+      // { query: BOOKS_BY_GENRE, variables: { genre: props.genreFilter } },
       { query: ALL_AUTHORS },
     ],
     onError: (error) => {
       console.log(error)
     },
     update: (cache, res) => {
-      console.log('***NewBook createBook mutation***')
-      updateCache(cache, { query: ALL_BOOKS }, res.data.addBook)
-      // updateCache(
-      //   cache,
-      //   { query: BOOKS_BY_GENRE, variables: { genre: props.genreFilter } },
-      //   res.data.addBook,
-      // )
+      if (props.genreFilter === 'all') {
+        updateCache(cache, { query: ALL_BOOKS }, res.data.addBook)
+      } else {
+        updateCache(
+          cache,
+          { query: BOOKS_BY_GENRE, variables: { genre: props.genreFilter } },
+          res.data.addBook,
+        )
+      }
     },
   })
 

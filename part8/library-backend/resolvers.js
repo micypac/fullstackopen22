@@ -79,7 +79,7 @@ const resolvers = {
       return { value: jwt.sign(userForToken, SECRET) }
     },
     addBook: async (root, args, { currentUser }) => {
-      console.log('***addBook Mutation***', args)
+      // console.log('***addBook Mutation***', args)
 
       if (!currentUser) {
         throw new AuthenticationError('user not authenticated')
@@ -104,17 +104,20 @@ const resolvers = {
       }
 
       const book = new Book({ ...args, author: author._id })
+      console.log('***addBook Mutation book***', book)
+      let returnedBook
 
       try {
         await book.populate('author', { name: 1 })
-        await book.save()
+        returnedBook = await book.save()
+        console.log('***addBook Mutation returnedBook***', returnedBook)
       } catch (error) {
         throw new UserInputError(error.message)
       }
 
       pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
-      return book
+      return returnedBook
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
