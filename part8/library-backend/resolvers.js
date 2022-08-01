@@ -15,19 +15,19 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if (!args.author && !args.genre) {
-        return Book.find({})
+        return Book.find({}).populate('author', { name: 1 })
       }
 
       // Author or genre filters
       if (args.author && args.genre) {
         const query = { author: args.author, genres: { $in: args.genre } }
-        return Book.find(query)
+        return Book.find(query).populate('author', { name: 1 })
       } else if (args.author && !args.genre) {
         const query = { author: args.author }
-        return Book.find(query)
+        return Book.find(query).populate('author', { name: 1 })
       } else {
         const query = { genres: { $in: args.genre } }
-        return Book.find(query)
+        return Book.find(query).populate('author', { name: 1 })
       }
     },
     allAuthors: async () => Author.find({}),
@@ -44,9 +44,10 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
-      // console.log('***Author Object Resolver***', root)
-      const query = { author: root._id }
-      return Book.collection.countDocuments(query)
+      console.log('***Author Object Resolver***', root)
+      // const query = { author: root._id }
+      // return Book.collection.countDocuments(query)
+      return root.books.length
     },
   },
   Mutation: {
@@ -87,27 +88,36 @@ const resolvers = {
 
       let author = await Author.findOne({ name: args.author })
 
+      // if (!author) {
+      //   const newAuthor = new Author({
+      //     name: args.author,
+      //   })
+
+      //   try {
+      //     author = await newAuthor.save()
+      //   } catch (error) {
+      //     throw new UserInputError(error.message, {
+      //       invalidArgs: args,
+      //     })
+      //   }
+      // }
+
       if (!author) {
-        const newAuthor = new Author({
+        author = new Author({
           name: args.author,
         })
-
-        try {
-          author = await newAuthor.save()
-        } catch (error) {
-          throw new UserInputError(error.message)
-
-          // throw new UserInputError(error.message, {
-          //   invalidArgs: args,
-          // })
-        }
       }
+
+      console.log('***author created***', author)
 
       const book = new Book({ ...args, author: author._id })
       console.log('***addBook Mutation book***', book)
       let returnedBook
 
       try {
+        author.books = author.books.concat(book._id)
+        await author.save()
+
         await book.populate('author', { name: 1 })
         returnedBook = await book.save()
         console.log('***addBook Mutation returnedBook***', returnedBook)
