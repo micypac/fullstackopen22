@@ -19,16 +19,27 @@ function evaluateRating(rating: number): string {
   }
 }
 
+function parseArguments(args: string[]): number[] {
+  const result: number[] = [];
+
+  for (let i = 2; i < args.length; i++) {
+    if (!isNaN(Number(args[i]))) {
+      result.push(Number(args[i]));
+    } else {
+      throw new Error("Arguments provided is not a number.");
+    }
+  }
+
+  return result;
+}
+
 function calculateExercises(days: number[], target: number): ExerciseResult {
   const result: ExerciseResult = {} as ExerciseResult;
 
   const totalHours = days.reduce((acc, val) => acc + val, 0);
   result.target = target;
   result.periodLength = days.length;
-  result.trainingDays = days.reduce(
-    (acc, val) => (val > 0 ? (acc += 1) : acc),
-    0
-  );
+  result.trainingDays = days.filter((val) => val > 0).length;
   result.average = totalHours / days.length;
   result.success = result.average >= result.target;
 
@@ -40,5 +51,21 @@ function calculateExercises(days: number[], target: number): ExerciseResult {
   return result;
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+// console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
 // console.log(calculateExercises([2, 1, 0, 2, 4.5, 0, 3, 1, 0], 4));
+
+try {
+  const parsedResult = parseArguments(process.argv);
+  const days = parsedResult.slice(1);
+  const target = parsedResult[0];
+
+  console.log(calculateExercises(days, target));
+} catch (err) {
+  let errMsg = "Something went wrong.";
+  if (err instanceof Error) {
+    errMsg += " Error: " + err.message;
+  }
+  console.log(errMsg);
+}
+
+export {};

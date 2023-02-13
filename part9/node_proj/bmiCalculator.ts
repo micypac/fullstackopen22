@@ -1,3 +1,22 @@
+interface ValidArgs {
+  val1: number;
+  val2: number;
+}
+
+const parseArguments = (args: string[]): ValidArgs => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  if (args.length > 4) throw new Error("Too many arguments");
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      val1: Number(args[2]),
+      val2: Number(args[3]),
+    };
+  } else {
+    throw new Error("Arguments provided is not a number");
+  }
+};
+
 const calculateBMI = (height: number, weight: number): string => {
   let heightSquare: number = (height / 100) ** 2;
   let result: number = weight / heightSquare;
@@ -21,4 +40,16 @@ const calculateBMI = (height: number, weight: number): string => {
   }
 };
 
-console.log(calculateBMI(180, 74));
+// console.log(calculateBMI(180, 74));
+
+try {
+  const { val1, val2 } = parseArguments(process.argv);
+  console.log(calculateBMI(val1, val2));
+} catch (err) {
+  let errorMsg = "Something went wrong.";
+  if (err instanceof Error) {
+    errorMsg += " Error: " + err.message;
+  }
+
+  console.log(errorMsg);
+}
