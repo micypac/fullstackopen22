@@ -1,4 +1,4 @@
-interface ExerciseResult {
+export interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -33,7 +33,10 @@ function parseArguments(args: string[]): number[] {
   return result;
 }
 
-function calculateExercises(days: number[], target: number): ExerciseResult {
+export function calculateExercises(
+  days: number[],
+  target: number
+): ExerciseResult {
   const result: ExerciseResult = {} as ExerciseResult;
 
   const totalHours = days.reduce((acc, val) => acc + val, 0);
@@ -54,18 +57,20 @@ function calculateExercises(days: number[], target: number): ExerciseResult {
 // console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
 // console.log(calculateExercises([2, 1, 0, 2, 4.5, 0, 3, 1, 0], 4));
 
-try {
-  const parsedResult = parseArguments(process.argv);
-  const days = parsedResult.slice(1);
-  const target = parsedResult[0];
+export function exerciseMain() {
+  try {
+    const parsedResult = parseArguments(process.argv);
+    const days = parsedResult.slice(1);
+    const target = parsedResult[0];
 
-  console.log(calculateExercises(days, target));
-} catch (err) {
-  let errMsg = "Something went wrong.";
-  if (err instanceof Error) {
-    errMsg += " Error: " + err.message;
+    console.log(calculateExercises(days, target));
+  } catch (err) {
+    let errMsg = "Something went wrong.";
+    if (err instanceof Error) {
+      errMsg += " Error: " + err.message;
+    }
+    console.log(errMsg);
   }
-  console.log(errMsg);
 }
 
 export {};

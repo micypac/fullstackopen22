@@ -18,8 +18,8 @@ const parseArguments = (args: string[]): ValidArgs => {
 };
 
 export const calculateBMI = (height: number, weight: number): string => {
-  let heightSquare: number = (height / 100) ** 2;
-  let result: number = weight / heightSquare;
+  const heightSquare: number = (height / 100) ** 2;
+  const result: number = weight / heightSquare;
 
   if (result < 16) {
     return `Severe Thinness`;
@@ -42,14 +42,16 @@ export const calculateBMI = (height: number, weight: number): string => {
 
 // console.log(calculateBMI(180, 74));
 
-try {
-  const { val1, val2 } = parseArguments(process.argv);
-  console.log(calculateBMI(val1, val2));
-} catch (err) {
-  let errorMsg = "Something went wrong.";
-  if (err instanceof Error) {
-    errorMsg += " Error: " + err.message;
-  }
+export const module_run = () => {
+  try {
+    const { val1, val2 } = parseArguments(process.argv);
+    console.log(calculateBMI(val1, val2));
+  } catch (err) {
+    let errorMsg = "Something went wrong.";
+    if (err instanceof Error) {
+      errorMsg += " Error: " + err.message;
+    }
 
-  console.log(errorMsg);
-}
+    console.log(errorMsg);
+  }
+};
