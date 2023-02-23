@@ -18,3 +18,18 @@ export interface EntryFormProps {
   setNewComment: React.Dispatch<React.SetStateAction<string>>;
   handleNewDiary: (event: React.SyntheticEvent) => Promise<void>;
 }
+
+export enum Weather {
+  Sunny = "sunny",
+  Rainy = "rainy",
+  Cloudy = "cloudy",
+  Windy = "windy",
+  Stormy = "stormy",
+}
+
+export enum Visibility {
+  Great = "great",
+  Good = "good",
+  Ok = "ok",
+  Poor = "poor",
+}

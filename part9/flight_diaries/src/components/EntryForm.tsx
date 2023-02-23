@@ -1,4 +1,4 @@
-import { EntryFormProps } from "../types";
+import { EntryFormProps, Weather, Visibility } from "../types";
 
 const EntryForm = ({
   newDate,
@@ -16,29 +16,47 @@ const EntryForm = ({
       <div>
         <label htmlFor="date">Date: </label>
         <input
-          type="text"
+          type="date"
           id="date"
           value={newDate}
           onChange={(e) => setNewDate(e.target.value)}
         />
       </div>
       <div>
-        <label htmlFor="weather">Weather: </label>
-        <input
-          type="text"
-          id="weather"
-          value={newWeather}
-          onChange={(e) => setNewWeather(e.target.value)}
-        />
+        <fieldset>
+          <legend>Weather: </legend>
+          {Object.values(Weather).map((item) => (
+            <div key={item.toString()}>
+              <input
+                type="radio"
+                name="weather"
+                id={item.toString()}
+                value={item.toString()}
+                checked={newWeather === item.toString()}
+                onChange={(e) => setNewWeather(e.target.value)}
+              />
+              <label htmlFor={item.toString()}>{item.toString()}</label>
+            </div>
+          ))}
+        </fieldset>
       </div>
       <div>
-        <label htmlFor="visibility">Visibility: </label>
-        <input
-          type="text"
-          id="visibility"
-          value={newVisibility}
-          onChange={(e) => setNewVisibility(e.target.value)}
-        />
+        <fieldset>
+          <legend>Visibility: </legend>
+          {Object.values(Visibility).map((item) => (
+            <div key={item.toString()}>
+              <input
+                type="radio"
+                name="visibility"
+                id={item.toString()}
+                value={item.toString()}
+                checked={newVisibility === item.toString()}
+                onChange={(e) => setNewVisibility(e.target.value)}
+              />
+              <label htmlFor={item.toString()}>{item.toString()}</label>
+            </div>
+          ))}
+        </fieldset>
       </div>
       <div>
         <label htmlFor="comment">Comment: </label>

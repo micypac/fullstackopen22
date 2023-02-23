@@ -17,7 +17,7 @@ label {
   width: 100px;
 }
 
-input,
+input[type="date"],
 textarea {
   width: 300px;
 }
@@ -25,4 +25,10 @@ textarea {
 button {
   margin: 20px 0 20px 100px;
   width: 308px;
+}
+
+fieldset {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 376px;
 }

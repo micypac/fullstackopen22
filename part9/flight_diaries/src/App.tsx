@@ -10,8 +10,8 @@ import "./App.css";
 function App() {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
   const [newDate, setNewDate] = useState("");
-  const [newWeather, setNewWeather] = useState("");
-  const [newVisibility, setNewVisibility] = useState("");
+  const [newWeather, setNewWeather] = useState("sunny");
+  const [newVisibility, setNewVisibility] = useState("great");
   const [newComment, setNewComment] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [messageClass, setMessageClass] = useState("added");
@@ -56,8 +56,8 @@ function App() {
     }
 
     setNewDate("");
-    setNewWeather("");
-    setNewVisibility("");
+    setNewWeather("sunny");
+    setNewVisibility("great");
     setNewComment("");
   };
 
