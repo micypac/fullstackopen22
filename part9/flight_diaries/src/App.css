@@ -11,3 +11,18 @@
 p {
   margin: 0;
 }
+
+label {
+  display: inline-block;
+  width: 100px;
+}
+
+input,
+textarea {
+  width: 300px;
+}
+
+button {
+  margin: 20px 0 20px 100px;
+  width: 308px;
+}
