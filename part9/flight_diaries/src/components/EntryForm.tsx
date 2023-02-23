@@ -1,3 +1,5 @@
+import { EntryFormProps } from "../types";
+
 const EntryForm = ({
   newDate,
   newWeather,
@@ -8,17 +10,7 @@ const EntryForm = ({
   setNewVisibility,
   setNewComment,
   handleNewDiary,
-}: {
-  newDate: string;
-  newWeather: string;
-  newVisibility: string;
-  newComment: string;
-  setNewDate: React.Dispatch<React.SetStateAction<string>>;
-  setNewWeather: React.Dispatch<React.SetStateAction<string>>;
-  setNewVisibility: React.Dispatch<React.SetStateAction<string>>;
-  setNewComment: React.Dispatch<React.SetStateAction<string>>;
-  handleNewDiary: (event: React.SyntheticEvent) => Promise<void>;
-}) => {
+}: EntryFormProps) => {
   return (
     <form onSubmit={handleNewDiary}>
       <div>
