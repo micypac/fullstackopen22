@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Notification from "./components/Notification";
+import Entries from "./components/Entries";
 import { DiaryEntry, NewDiaryEntry } from "./types";
 import diaryService from "./services/diaryService";
 import "./App.css";
@@ -109,13 +110,7 @@ function App() {
       <div className="App-header">
         <h2>Daily Entries</h2>
       </div>
-      {diaryEntries.map((item: DiaryEntry) => (
-        <div key={item.id}>
-          <h2>{item.date}</h2>
-          <p>Weather: {item.weather}</p>
-          <p>Visibility: {item.visibility}</p>
-        </div>
-      ))}
+      <Entries entries={diaryEntries} />
     </div>
   );
 }
