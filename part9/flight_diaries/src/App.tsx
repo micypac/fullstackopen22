@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Notification from "./components/Notification";
 import { DiaryEntry, NewDiaryEntry } from "./types";
+import diaryService from "./services/diaryService";
 import "./App.css";
 
 function App() {
@@ -9,16 +11,19 @@ function App() {
   const [newWeather, setNewWeather] = useState("");
   const [newVisibility, setNewVisibility] = useState("");
   const [newComment, setNewComment] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageClass, setMessageClass] = useState("added");
 
   useEffect(() => {
-    axios
-      .get<DiaryEntry[]>("http://localhost:3001/api/diaries")
-      .then((resp) => {
-        setDiaryEntries(resp.data);
-      });
+    const getDiaryEntries = async () => {
+      const data = await diaryService.getDiaryEntries();
+      setDiaryEntries(data);
+    };
+
+    getDiaryEntries();
   }, []);
 
-  const handleNewDiary = (event: React.SyntheticEvent) => {
+  const handleNewDiary = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     const newEntry: NewDiaryEntry = {
@@ -28,11 +33,25 @@ function App() {
       comment: newComment,
     };
 
-    axios
-      .post<DiaryEntry>("http://localhost:3001/api/diaries", newEntry)
-      .then((resp) => {
-        setDiaryEntries(diaryEntries.concat(resp.data));
-      });
+    try {
+      const data = await diaryService.createDiaryEntry(newEntry);
+      setDiaryEntries(diaryEntries.concat(data));
+      setMessageClass("added");
+      setMessage("New diary entry added!");
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessageClass("error");
+        setMessage(error.response?.data);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      } else {
+        console.error(error);
+      }
+    }
 
     setNewDate("");
     setNewWeather("");
@@ -45,6 +64,7 @@ function App() {
       <div className="App-header">
         <h2>Add New Entry</h2>
       </div>
+      <Notification message={message} messageClass={messageClass} />
       <form onSubmit={handleNewDiary}>
         <div>
           <label htmlFor="date">Date: </label>
