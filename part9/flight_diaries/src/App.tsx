@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Notification from "./components/Notification";
 import Entries from "./components/Entries";
+import EntryForm from "./components/EntryForm";
 import { DiaryEntry, NewDiaryEntry } from "./types";
 import diaryService from "./services/diaryService";
 import "./App.css";
@@ -66,47 +67,17 @@ function App() {
         <h2>Add New Entry</h2>
       </div>
       <Notification message={message} messageClass={messageClass} />
-      <form onSubmit={handleNewDiary}>
-        <div>
-          <label htmlFor="date">Date: </label>
-          <input
-            type="text"
-            id="date"
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="weather">Weather: </label>
-          <input
-            type="text"
-            id="weather"
-            value={newWeather}
-            onChange={(e) => setNewWeather(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="visibility">Visibility: </label>
-          <input
-            type="text"
-            id="visibility"
-            value={newVisibility}
-            onChange={(e) => setNewVisibility(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="comment">Comment: </label>
-          <textarea
-            id="comment"
-            rows={3}
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          />
-        </div>
-        <div>
-          <button>Submit</button>
-        </div>
-      </form>
+      <EntryForm
+        newDate={newDate}
+        newWeather={newWeather}
+        newVisibility={newVisibility}
+        newComment={newComment}
+        setNewDate={setNewDate}
+        setNewWeather={setNewWeather}
+        setNewVisibility={setNewVisibility}
+        setNewComment={setNewComment}
+        handleNewDiary={handleNewDiary}
+      />
       <div className="App-header">
         <h2>Daily Entries</h2>
       </div>
