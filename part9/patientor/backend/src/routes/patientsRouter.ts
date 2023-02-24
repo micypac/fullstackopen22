@@ -7,6 +7,16 @@ patientsRouter.get("/", (_req, res) => {
   res.send(patientService.getPatientsPublicInfo());
 });
 
+patientsRouter.get("/:id", (req, res) => {
+  const currentPatient = patientService.getPatientById(req.params.id);
+
+  if (currentPatient) {
+    res.send(currentPatient);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 patientsRouter.post("/", (req, res) => {
   try {
     const newPatientEntry = toNewPatientEntry(req.body);

@@ -12,6 +12,12 @@ const getPatientsPublicInfo = (): PublicPatientInfo[] => {
   }));
 };
 
+const getPatientById = (id: string): PatientInfo | undefined => {
+  const currentPatient = patients.find((patient) => patient.id === id);
+  console.log(currentPatient);
+  return currentPatient;
+};
+
 const addPatient = (entry: PatientEntry): PatientInfo => {
   const newPatientEntry = {
     id: uuid(),
@@ -25,5 +31,6 @@ const addPatient = (entry: PatientEntry): PatientInfo => {
 
 export default {
   getPatientsPublicInfo,
+  getPatientById,
   addPatient,
 };
