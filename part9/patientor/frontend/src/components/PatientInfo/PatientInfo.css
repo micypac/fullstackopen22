@@ -1,0 +1,10 @@
+h2 {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+p {
+  margin: 5px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
