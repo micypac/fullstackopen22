@@ -23,7 +23,7 @@ interface BaseEntry {
   date: string;
   specialist: string;
   description: string;
-  diagnosisCodes?: Array<Diagnosis["code"]>[];
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 interface HealthCheckEntry extends BaseEntry {
@@ -70,7 +70,6 @@ export type PatientEntry = Omit<PatientInfo, "id">;
 /*
   This doesnt work as it would only contain the common properties and not
   the ones they don't share, e.g. discharge, employerName, etc.
-
 */
 // export type EntrySansId = Omit<Entry, "id">;
 
