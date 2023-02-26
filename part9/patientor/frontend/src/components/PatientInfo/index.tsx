@@ -5,6 +5,7 @@ import patientService from "../../services/patients";
 import axios from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
+import TransgenderIcon from "@mui/icons-material/Transgender";
 import "./PatientInfo.css";
 
 const PatientInfo = () => {
@@ -33,7 +34,13 @@ const PatientInfo = () => {
   const content = patient ? (
     <div>
       <h2>{patient.name}</h2>
-      {patient.gender === "male" ? <MaleIcon /> : <FemaleIcon />}
+      {patient.gender === "other" ? (
+        <TransgenderIcon />
+      ) : patient.gender === "male" ? (
+        <MaleIcon />
+      ) : (
+        <FemaleIcon />
+      )}
 
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
