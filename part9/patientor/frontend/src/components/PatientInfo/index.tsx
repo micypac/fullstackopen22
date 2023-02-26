@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Patient } from "../../types";
+import { Patient, Diagnosis } from "../../types";
 import patientService from "../../services/patients";
 import axios from "axios";
 import MaleIcon from "@mui/icons-material/Male";
@@ -8,7 +8,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import "./PatientInfo.css";
 
-const PatientInfo = () => {
+const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
   const { patientId } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [message, setMessage] = useState<string | null>("");
@@ -53,7 +53,12 @@ const PatientInfo = () => {
           </p>
           <ul>
             {entry.diagnosisCodes?.map((code, codeIdx) => (
-              <li key={codeIdx}>{code}</li>
+              <li key={codeIdx}>
+                <>
+                  {code}{" "}
+                  {diagnoses.find((diagnose) => diagnose.code === code)?.name}
+                </>
+              </li>
             ))}
           </ul>
         </div>
