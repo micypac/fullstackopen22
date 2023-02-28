@@ -45,7 +45,7 @@ const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
 
-      <ChartEntries entries={patient.entries} />
+      <ChartEntries entries={patient.entries} diagnosesMaster={diagnoses} />
       {/* <h3>Entries: </h3>
       {patient.entries.map((entry, idx) => (
         <div key={idx}>

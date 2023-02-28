@@ -1,7 +1,14 @@
-import { HospitalEntry as EntryType } from "../../types";
+import { HospitalEntry as EntryType, Diagnosis } from "../../types";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import Diagnoses from "../Diagnoses";
 
-const HospitalEntry = ({ entry }: { entry: EntryType }) => {
+const HospitalEntry = ({
+  entry,
+  diagnosesMaster,
+}: {
+  entry: EntryType;
+  diagnosesMaster: Diagnosis[];
+}) => {
   return (
     <div className="entry-container">
       <p className="entry-date">{entry.date}</p>
@@ -11,6 +18,10 @@ const HospitalEntry = ({ entry }: { entry: EntryType }) => {
       <p>{entry.discharge.date}</p>
       <p>{entry.discharge.criteria}</p>
       <p>diagnose by {entry.specialist}</p>
+      <Diagnoses
+        patientDiagnosesCodes={entry.diagnosisCodes}
+        diagnosesMaster={diagnosesMaster}
+      />
     </div>
   );
 };
