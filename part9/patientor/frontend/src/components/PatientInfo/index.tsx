@@ -7,7 +7,6 @@ import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import ChartEntries from "../ChartEntries";
-import "./PatientInfo.css";
 
 const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
   const { patientId } = useParams();
