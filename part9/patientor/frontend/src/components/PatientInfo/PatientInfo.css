@@ -8,3 +8,23 @@ p {
   font-size: 1.1rem;
   /* font-weight: 700; */
 }
+
+h4 {
+  margin: 10px 5px;
+}
+
+.entry-date,
+.entry-occupation {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.entry-description {
+  font-style: italic;
+}
+
+.entry-container {
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}

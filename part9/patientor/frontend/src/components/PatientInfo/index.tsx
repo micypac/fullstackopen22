@@ -6,6 +6,7 @@ import axios from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import ChartEntries from "../ChartEntries";
 import "./PatientInfo.css";
 
 const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
@@ -45,7 +46,8 @@ const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
 
-      <h3>Entries: </h3>
+      <ChartEntries entries={patient.entries} />
+      {/* <h3>Entries: </h3>
       {patient.entries.map((entry, idx) => (
         <div key={idx}>
           <p>
@@ -62,7 +64,7 @@ const PatientInfo = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
             ))}
           </ul>
         </div>
-      ))}
+      ))} */}
     </div>
   ) : (
     <div>
