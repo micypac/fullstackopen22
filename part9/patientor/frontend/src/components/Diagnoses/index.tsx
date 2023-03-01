@@ -1,20 +1,19 @@
 import { Diagnosis } from "../../types";
+import { useDiagnoses } from "../../context/DiagnosesContext";
 
 interface DiagnosesPropTypes {
   patientDiagnosesCodes: Diagnosis["code"][] | undefined;
-  diagnosesMaster: Diagnosis[];
 }
 
-const Diagnoses = ({
-  patientDiagnosesCodes,
-  diagnosesMaster,
-}: DiagnosesPropTypes) => {
+const Diagnoses = ({ patientDiagnosesCodes }: DiagnosesPropTypes) => {
+  const diagnoses = useDiagnoses();
+
   if (patientDiagnosesCodes?.length) {
     return (
       <ul>
         {patientDiagnosesCodes.map((code) => (
           <li key={code}>
-            {code} {diagnosesMaster.find((item) => item.code === code)?.name}
+            {code} {diagnoses.find((item) => item.code === code)?.name}
           </li>
         ))}
       </ul>

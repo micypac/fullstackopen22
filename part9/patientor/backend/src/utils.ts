@@ -112,6 +112,7 @@ const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
   return object.diagnosisCodes as Array<Diagnosis["code"]>;
 };
 
+//******* Validating req.body object as PatientEntry type *******//
 export const toNewPatientEntry = (object: unknown): PatientEntry => {
   if (!object || typeof object !== "object") {
     throw new Error("Incorrect or missing data");
@@ -139,6 +140,7 @@ export const toNewPatientEntry = (object: unknown): PatientEntry => {
   }
 };
 
+//******* Validating req.body object as EntryWithoutId type *******//
 export const toNewChartEntry = (object: unknown): EntryWithoutId => {
   if (!object || typeof object !== "object") {
     throw new Error("Incorrect or missing data");

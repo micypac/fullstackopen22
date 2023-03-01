@@ -1,4 +1,4 @@
-import { Entry as EntryType, Diagnosis } from "../../types";
+import { Entry as EntryType } from "../../types";
 import HealthCheckEntry from "./HealthCheckEntry";
 import HospitalEntry from "./HospitalEntry";
 import OccupationalHealthcareEntry from "./OccupationalHealthcareEntry";
@@ -9,26 +9,16 @@ const assertNever = (val: never): never => {
   );
 };
 
-const Entry: React.FC<{ entry: EntryType; diagnosesMaster: Diagnosis[] }> = ({
-  entry,
-  diagnosesMaster,
-}) => {
+const Entry: React.FC<{ entry: EntryType }> = ({ entry }) => {
   switch (entry.type) {
     case "HealthCheck":
-      return (
-        <HealthCheckEntry entry={entry} diagnosesMaster={diagnosesMaster} />
-      );
+      return <HealthCheckEntry entry={entry} />;
 
     case "Hospital":
-      return <HospitalEntry entry={entry} diagnosesMaster={diagnosesMaster} />;
+      return <HospitalEntry entry={entry} />;
 
     case "OccupationalHealthcare":
-      return (
-        <OccupationalHealthcareEntry
-          entry={entry}
-          diagnosesMaster={diagnosesMaster}
-        />
-      );
+      return <OccupationalHealthcareEntry entry={entry} />;
 
     default:
       return assertNever(entry);
