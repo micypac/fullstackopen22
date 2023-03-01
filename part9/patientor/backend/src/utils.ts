@@ -166,9 +166,7 @@ export const toNewChartEntry = (object: unknown): EntryWithoutId => {
         };
 
         if ("diagnosisCodes" in object) {
-          newEntry["diagnosisCodes"] = parseDiagnosisCodes(
-            object.diagnosisCodes
-          );
+          newEntry["diagnosisCodes"] = parseDiagnosisCodes(object);
         }
 
         return newEntry;
@@ -197,9 +195,7 @@ export const toNewChartEntry = (object: unknown): EntryWithoutId => {
             };
 
             if ("diagnosisCodes" in object) {
-              newEntry["diagnosisCodes"] = parseDiagnosisCodes(
-                object.diagnosisCodes
-              );
+              newEntry["diagnosisCodes"] = parseDiagnosisCodes(object);
             }
 
             return newEntry;
@@ -223,9 +219,7 @@ export const toNewChartEntry = (object: unknown): EntryWithoutId => {
         };
 
         if ("diagnosisCodes" in object) {
-          newEntry["diagnosisCodes"] = parseDiagnosisCodes(
-            object.diagnosisCodes
-          );
+          newEntry["diagnosisCodes"] = parseDiagnosisCodes(object);
         }
 
         if ("sickLeave" in object) {
