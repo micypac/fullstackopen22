@@ -5,10 +5,12 @@ import {
   EntryWithoutId,
   Patient,
   EntryType,
+  Diagnosis,
 } from "../../types";
 import {
   TextField,
   InputLabel,
+  Input,
   MenuItem,
   Button,
   Select,
@@ -17,6 +19,7 @@ import {
 
 import patientsService from "../../services/patients";
 import Notification from "../Notification";
+import { useDiagnoses } from "../../context/DiagnosesContext";
 
 interface Props {
   patientId: string;
@@ -28,7 +31,9 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [diagnosisCodes, setDiagnosisCodes] = useState("");
+  const [diagnosisCodes, setDiagnosisCodes] = useState<
+    Array<Diagnosis["code"]>
+  >([]);
 
   // state for HealthCheck
   const [HCRating, setHCRating] = useState(HealthCheckRating.Healthy);
@@ -45,6 +50,9 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
   // states for Notification component
   const [message, setMessage] = useState<string | null>(null);
   const [messageClass, setMessageClass] = useState("added");
+
+  // context for diagnoses master data
+  const diagnoses = useDiagnoses();
 
   const onEntryTypeChange = (event: SelectChangeEvent<EntryType>) => {
     event.preventDefault();
@@ -101,8 +109,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
     }
 
     if (diagnosisCodes.length) {
-      const codesArr = diagnosisCodes.split(" ");
-      newEntry.diagnosisCodes = codesArr;
+      newEntry.diagnosisCodes = diagnosisCodes;
     }
 
     try {
@@ -136,7 +143,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
     setEmployer("");
     setSickStartDate("");
     setSickEndDate("");
-    setDiagnosisCodes("");
+    setDiagnosisCodes([]);
   };
 
   return (
@@ -174,10 +181,10 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           fullWidth
         />
 
-        <TextField
+        <InputLabel htmlFor="date">Date</InputLabel>
+        <Input
           id="date"
-          label="Date"
-          variant="filled"
+          type="date"
           size="small"
           margin="dense"
           value={date}
@@ -196,7 +203,8 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           fullWidth
         />
 
-        <TextField
+        <InputLabel>HealthCheck Rating</InputLabel>
+        <Select
           id="hcr"
           label="HealthCheck Rating"
           variant="filled"
@@ -206,12 +214,20 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           onChange={(e) => setHCRating(Number(e.target.value))}
           fullWidth
           disabled={entryType !== "HealthCheck"}
-        />
+        >
+          {Object.values(HealthCheckRating)
+            .filter((v) => !isNaN(Number(v)))
+            .map((item) => (
+              <MenuItem key={item} value={item}>
+                {item.toString()}
+              </MenuItem>
+            ))}
+        </Select>
 
-        <TextField
+        <InputLabel htmlFor="dischargeDate">Discharge Date</InputLabel>
+        <Input
           id="dischargeDate"
-          label="Discharge Date"
-          variant="filled"
+          type="date"
           size="small"
           margin="dense"
           value={dischargeDate}
@@ -244,10 +260,10 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           disabled={entryType !== "OccupationalHealthcare"}
         />
 
-        <TextField
+        <InputLabel>Sick Leave (Start & End Date)</InputLabel>
+        <Input
           id="sickStartDate"
-          label="Sick Start Date"
-          variant="filled"
+          type="date"
           size="small"
           margin="dense"
           value={sickStartDate}
@@ -256,10 +272,9 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           disabled={entryType !== "OccupationalHealthcare"}
         />
 
-        <TextField
+        <Input
           id="sickEndDate"
-          label="Sick End Date"
-          variant="filled"
+          type="date"
           size="small"
           margin="dense"
           value={sickEndDate}
@@ -268,16 +283,24 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           disabled={entryType !== "OccupationalHealthcare"}
         />
 
-        <TextField
+        <InputLabel>Diagnosis Codes</InputLabel>
+        <Select
           id="diagnosisCodes"
           label="Diagnosis Codes"
           variant="filled"
           size="small"
           margin="dense"
           value={diagnosisCodes}
-          onChange={(e) => setDiagnosisCodes(e.target.value)}
+          onChange={(e) => setDiagnosisCodes(e.target.value as string[])}
           fullWidth
-        />
+          multiple
+        >
+          {diagnoses.map((item) => (
+            <MenuItem key={item.code} value={item.code}>
+              {item.code}
+            </MenuItem>
+          ))}
+        </Select>
 
         <div>
           <Button type="submit">Submit</Button>

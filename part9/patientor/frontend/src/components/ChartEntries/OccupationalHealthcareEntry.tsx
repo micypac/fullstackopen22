@@ -9,6 +9,9 @@ const OccupationalHealthcareEntry = ({ entry }: { entry: EntryType }) => {
       <WorkIcon />
       <p className="entry-occupation">{entry.employerName}</p>
       <p className="entry-description">{entry.description}</p>
+      <h4>Sick Leave:</h4>
+      <p>{entry.sickLeave?.startDate}</p>
+      <p>{entry.sickLeave?.endDate}</p>
       <p>diagnose by {entry.specialist}</p>
       <Diagnoses patientDiagnosesCodes={entry.diagnosisCodes} />
     </div>
