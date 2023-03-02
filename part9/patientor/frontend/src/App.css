@@ -23,8 +23,29 @@ h4 {
   font-style: italic;
 }
 
-.entry-container {
+.entry-container,
+.entry-form {
   border: 1px solid black;
   border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.added {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
   margin-bottom: 10px;
 }

@@ -7,6 +7,7 @@ import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import ChartEntries from "../ChartEntries";
+import AddEntryForm from "../AddEntry";
 
 const PatientInfo = () => {
   const { patientId } = useParams();
@@ -44,6 +45,8 @@ const PatientInfo = () => {
 
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
+
+      <AddEntryForm patientId={patientId as string} setPatient={setPatient} />
 
       <ChartEntries entries={patient.entries} />
     </div>
