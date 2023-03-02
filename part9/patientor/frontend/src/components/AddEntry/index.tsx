@@ -126,10 +126,16 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
       }
     }
 
+    setEntryType("HealthCheck");
     setDescription("");
     setDate("");
     setSpecialist("");
     setHCRating(HealthCheckRating.Healthy);
+    setDischargeDate("");
+    setCriteria("");
+    setEmployer("");
+    setSickStartDate("");
+    setSickEndDate("");
     setDiagnosisCodes("");
   };
 
