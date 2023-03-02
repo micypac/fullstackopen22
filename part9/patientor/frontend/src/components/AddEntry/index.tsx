@@ -153,7 +153,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
       <Notification message={message} messageClass={messageClass} />
 
       <form onSubmit={addEntry}>
-        <InputLabel htmlFor="entryType">Entry Type: </InputLabel>
+        <InputLabel>Entry Type </InputLabel>
         <Select
           id="entryType"
           variant="filled"
@@ -170,6 +170,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           </MenuItem>
         </Select>
 
+        <InputLabel>Description</InputLabel>
         <TextField
           id="description"
           label="Description"
@@ -181,7 +182,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           fullWidth
         />
 
-        <InputLabel htmlFor="date">Date</InputLabel>
+        <InputLabel>Date</InputLabel>
         <Input
           id="date"
           type="date"
@@ -192,6 +193,7 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           fullWidth
         />
 
+        <InputLabel>Specialist</InputLabel>
         <TextField
           id="specialist"
           label="Specialist"
@@ -201,86 +203,6 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           value={specialist}
           onChange={(e) => setSpecialist(e.target.value)}
           fullWidth
-        />
-
-        <InputLabel>HealthCheck Rating</InputLabel>
-        <Select
-          id="hcr"
-          label="HealthCheck Rating"
-          variant="filled"
-          size="small"
-          margin="dense"
-          value={HCRating}
-          onChange={(e) => setHCRating(Number(e.target.value))}
-          fullWidth
-          disabled={entryType !== "HealthCheck"}
-        >
-          {Object.values(HealthCheckRating)
-            .filter((v) => !isNaN(Number(v)))
-            .map((item) => (
-              <MenuItem key={item} value={item}>
-                {item.toString()}
-              </MenuItem>
-            ))}
-        </Select>
-
-        <InputLabel htmlFor="dischargeDate">Discharge Date</InputLabel>
-        <Input
-          id="dischargeDate"
-          type="date"
-          size="small"
-          margin="dense"
-          value={dischargeDate}
-          onChange={(e) => setDischargeDate(e.target.value)}
-          fullWidth
-          disabled={entryType !== "Hospital"}
-        />
-
-        <TextField
-          id="criteria"
-          label="Criteria"
-          variant="filled"
-          size="small"
-          margin="dense"
-          value={criteria}
-          onChange={(e) => setCriteria(e.target.value)}
-          fullWidth
-          disabled={entryType !== "Hospital"}
-        />
-
-        <TextField
-          id="employer"
-          label="Employer"
-          variant="filled"
-          size="small"
-          margin="dense"
-          value={employer}
-          onChange={(e) => setEmployer(e.target.value)}
-          fullWidth
-          disabled={entryType !== "OccupationalHealthcare"}
-        />
-
-        <InputLabel>Sick Leave (Start & End Date)</InputLabel>
-        <Input
-          id="sickStartDate"
-          type="date"
-          size="small"
-          margin="dense"
-          value={sickStartDate}
-          onChange={(e) => setSickStartDate(e.target.value)}
-          fullWidth
-          disabled={entryType !== "OccupationalHealthcare"}
-        />
-
-        <Input
-          id="sickEndDate"
-          type="date"
-          size="small"
-          margin="dense"
-          value={sickEndDate}
-          onChange={(e) => setSickEndDate(e.target.value)}
-          fullWidth
-          disabled={entryType !== "OccupationalHealthcare"}
         />
 
         <InputLabel>Diagnosis Codes</InputLabel>
@@ -302,8 +224,107 @@ const AddEntryForm = ({ patientId, setPatient }: Props) => {
           ))}
         </Select>
 
-        <div>
-          <Button type="submit">Submit</Button>
+        {/* Fields for HealthCheck entry */}
+        {entryType === "HealthCheck" ? (
+          <>
+            <InputLabel>HealthCheck Rating</InputLabel>
+            <Select
+              id="hcr"
+              label="HealthCheck Rating"
+              variant="filled"
+              size="small"
+              margin="dense"
+              value={HCRating}
+              onChange={(e) => setHCRating(Number(e.target.value))}
+              fullWidth
+              disabled={entryType !== "HealthCheck"}
+            >
+              {Object.values(HealthCheckRating)
+                .filter((v) => !isNaN(Number(v)))
+                .map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item.toString()}
+                  </MenuItem>
+                ))}
+            </Select>
+          </>
+        ) : null}
+
+        {/* Fields for Hospital entry */}
+        {entryType === "Hospital" ? (
+          <>
+            <InputLabel>Discharge Date</InputLabel>
+            <Input
+              id="dischargeDate"
+              type="date"
+              size="small"
+              margin="dense"
+              value={dischargeDate}
+              onChange={(e) => setDischargeDate(e.target.value)}
+              fullWidth
+              disabled={entryType !== "Hospital"}
+            />
+
+            <InputLabel>Criteria</InputLabel>
+            <TextField
+              id="criteria"
+              label="Criteria"
+              variant="filled"
+              size="small"
+              margin="dense"
+              value={criteria}
+              onChange={(e) => setCriteria(e.target.value)}
+              fullWidth
+              disabled={entryType !== "Hospital"}
+            />
+          </>
+        ) : null}
+
+        {/* Fields for OccupationalHealthcare entry */}
+        {entryType === "OccupationalHealthcare" ? (
+          <>
+            <InputLabel>Employer</InputLabel>
+            <TextField
+              id="employer"
+              label="Employer"
+              variant="filled"
+              size="small"
+              margin="dense"
+              value={employer}
+              onChange={(e) => setEmployer(e.target.value)}
+              fullWidth
+              disabled={entryType !== "OccupationalHealthcare"}
+            />
+
+            <InputLabel>Sick Leave (Start & End Date)</InputLabel>
+            <Input
+              id="sickStartDate"
+              type="date"
+              size="small"
+              margin="dense"
+              value={sickStartDate}
+              onChange={(e) => setSickStartDate(e.target.value)}
+              fullWidth
+              disabled={entryType !== "OccupationalHealthcare"}
+            />
+
+            <Input
+              id="sickEndDate"
+              type="date"
+              size="small"
+              margin="dense"
+              value={sickEndDate}
+              onChange={(e) => setSickEndDate(e.target.value)}
+              fullWidth
+              disabled={entryType !== "OccupationalHealthcare"}
+            />
+          </>
+        ) : null}
+
+        <div className="entry-button">
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
         </div>
       </form>
     </div>

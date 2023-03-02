@@ -31,6 +31,10 @@ h4 {
   padding: 10px;
 }
 
+.entry-button {
+  margin: 10px 0;
+}
+
 .added {
   color: green;
   background: lightgrey;
