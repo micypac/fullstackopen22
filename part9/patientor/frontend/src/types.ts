@@ -52,6 +52,8 @@ export type Entry =
   | HealthCheckEntry
   | OccupationalHealthcareEntry;
 
+export type EntryType = "HealthCheck" | "Hospital" | "OccupationalHealthcare";
+
 // Define special omit for unions
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>

@@ -244,7 +244,7 @@ export const toNewChartEntry = (object: unknown): EntryWithoutId => {
         return newEntry;
 
       default:
-        throw new Error("Unhandled discriminated union member for entary type");
+        throw new Error("Unhandled discriminated union member for entry type");
     }
   } else {
     throw new Error("Incorrect data: Some required fields are missing");
