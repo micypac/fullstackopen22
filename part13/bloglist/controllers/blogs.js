@@ -47,8 +47,10 @@ router.post("/", tokenExtractor, async (req, res) => {
   res.status(201).json(blog);
 });
 
-router.delete("/:id", blogFinder, async (req, res) => {
-  if (req.blog) {
+router.delete("/:id", [tokenExtractor, blogFinder], async (req, res) => {
+  // const user = await Bloguser.findByPk(req.decodedToken.id);
+
+  if (req.blog && req.blog.bloguserId === req.decodedToken.id) {
     await req.blog.destroy();
   }
 

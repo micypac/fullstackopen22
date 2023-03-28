@@ -15,6 +15,16 @@ app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
 
+app.use((error, req, res, next) => {
+  console.error(error.message);
+
+  if (error.name === "SequelizeValidationError") {
+    return res.status(400).json({ error: error.message });
+  }
+
+  next(error);
+});
+
 const start = async () => {
   await connectToDatabase();
   app.listen(PORT, () => {
