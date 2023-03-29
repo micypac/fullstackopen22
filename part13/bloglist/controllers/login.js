@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
-const { Bloguser } = require("../models");
+const { User } = require("../models");
 const { SECRET } = require("../utils/config");
 
 router.post("/", async (req, res) => {
   const body = req.body;
 
-  const user = await Bloguser.findOne({
+  const user = await User.findOne({
     where: {
       username: body.username,
     },

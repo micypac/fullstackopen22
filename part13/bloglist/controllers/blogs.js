@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
-const { Blog, Bloguser } = require("../models");
+const { Blog, User } = require("../models");
 const { SECRET } = require("../utils/config");
 
 // *********** MIDDLEWARES
@@ -50,9 +50,9 @@ router.get("/", async (req, res) => {
   console.log(where);
 
   const blogs = await Blog.findAll({
-    attributes: { exclude: ["bloguserId"] },
+    attributes: { exclude: ["userId"] },
     include: {
-      model: Bloguser,
+      model: User,
       attributes: ["name"],
     },
     where,
@@ -66,7 +66,7 @@ router.post("/", tokenExtractor, async (req, res) => {
   const user = await Bloguser.findByPk(req.decodedToken.id);
   const blog = await Blog.create({
     ...req.body,
-    bloguserId: user.id,
+    userId: user.id,
   });
 
   res.status(201).json(blog);
@@ -75,7 +75,7 @@ router.post("/", tokenExtractor, async (req, res) => {
 router.delete("/:id", [tokenExtractor, blogFinder], async (req, res) => {
   // const user = await Bloguser.findByPk(req.decodedToken.id);
 
-  if (req.blog && req.blog.bloguserId === req.decodedToken.id) {
+  if (req.blog && req.blog.userId === req.decodedToken.id) {
     await req.blog.destroy();
   }
 
