@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
-const { User } = require("../models");
+const { User, Session } = require("../models");
 const { SECRET } = require("../utils/config");
 
 router.post("/", async (req, res) => {
@@ -21,12 +21,23 @@ router.post("/", async (req, res) => {
     });
   }
 
+  if (user.disabled) {
+    return res.status(401).json({
+      error: "account disabled, please contact admin",
+    });
+  }
+
   const userForToken = {
     username: user.username,
     id: user.id,
   };
 
   const token = jwt.sign(userForToken, SECRET);
+
+  await Session.create({
+    userId: user.id,
+    token,
+  });
 
   res.status(200).send({
     token,
